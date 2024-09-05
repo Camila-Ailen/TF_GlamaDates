@@ -49,10 +49,18 @@ public class ServicioUsuario {
         usuario.setNombre(usuarioDetails.getNombre());
         usuario.setApellido(usuarioDetails.getApellido());
         usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
-        usuario.setCorreo(usuarioDetails.getCorreo());
         usuario.setClave(usuarioDetails.getClave());
         usuario.setTelefono(usuarioDetails.getTelefono());
         usuario.setActivo(usuarioDetails.isActivo());
+
+        if (!(usuario.getCorreo().equals(usuarioDetails.getCorreo()))){
+            if (repositorioUsuario.existsByCorreo(usuarioDetails.getCorreo())) {
+                throw new ResourceNotFoundException("Usuario", "correo", usuarioDetails.getCorreo());
+            } else {
+            usuario.setCorreo(usuarioDetails.getCorreo());
+            }
+        }
+
 
         return repositorioUsuario.save(usuario);
     }
