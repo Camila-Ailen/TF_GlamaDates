@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class Usuario {
     @Id
     @Column(name = "id_usuario", nullable = false, unique = true)
-    private int id;
+    private Integer id;
     @Column(name = "nombre_usuario", length = 100, nullable = false)
     private String nombre;
     @Column(name = "apellido_usuario", length = 100, nullable = false)
@@ -31,6 +31,6 @@ public class Usuario {
     private String telefono;
     @Column(name = "fecha_nacimiento_usuario", nullable = false)
     private LocalDate fechaNacimiento;
-    @Column(name = "fecha_ingreso_usuario", nullable = false)
+    @Column(name = "activo", nullable = false)
     private boolean activo;
 }
