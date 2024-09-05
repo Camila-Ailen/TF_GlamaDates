@@ -1,4 +1,4 @@
-package com.API.REST.usuario;
+package com.API.REST.modelo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

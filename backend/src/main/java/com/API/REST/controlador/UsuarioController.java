@@ -1,6 +1,7 @@
-package com.API.REST.usuario;
+package com.API.REST.controlador;
 
-import com.API.REST.exception.ResourceNotFoundException;
+import com.API.REST.modelo.Usuario;
+import com.API.REST.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,38 +13,39 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/usuarioAPI")
 
-public class ControladorUsuario {
-    @Autowired ServicioUsuario servicioUsuario;
+public class UsuarioController {
+    @Autowired
+    UsuarioService usuarioService;
 
     @GetMapping("/todoUsuarios")
     public List<Usuario> getAllUsuarios() {
-        return servicioUsuario.findAllUsuarios();
+        return usuarioService.findAllUsuarios();
     }
 
     @GetMapping("/usuarios")
     public List<Usuario> getAllUsuariosActivos() {
-        return servicioUsuario.findAllUsuariosActivos();
+        return usuarioService.findAllUsuariosActivos();
     }
 
     @GetMapping("/usuarios/{id}")
     public Usuario getUsuarioById(@PathVariable(value = "id") Integer usuarioId) {
-        return servicioUsuario.findUsuarioById(usuarioId);
+        return usuarioService.findUsuarioById(usuarioId);
     }
 
     @PostMapping("/usuarios")
     public Usuario postUsuario(@Valid @RequestBody Usuario usuario) {
-        return servicioUsuario.createUsuario(usuario);
+        return usuarioService.createUsuario(usuario);
     }
 
     @PutMapping("/usuarios/{id}")
     public Usuario putUsuario(@PathVariable(value = "id") Integer usuarioId,
                               @Valid @RequestBody Usuario usuarioDetails) {
-        return servicioUsuario.updateUsuario(usuarioId, usuarioDetails);
+        return usuarioService.updateUsuario(usuarioId, usuarioDetails);
     }
 
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<?> deleteUsuario(@PathVariable(value = "id") Integer usuarioId) {
-        return servicioUsuario.softDeleteUsuario(usuarioId);
+        return usuarioService.softDeleteUsuario(usuarioId);
     }
 
 }

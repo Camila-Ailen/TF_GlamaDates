@@ -1,27 +1,28 @@
-package com.API.REST.usuario;
+package com.API.REST.servicios;
 
 import com.API.REST.exception.ResourceNotFoundException;
+import com.API.REST.modelo.Usuario;
+import com.API.REST.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ServicioUsuario {
+public class UsuarioService {
 
     @Autowired
-    private RepositorioUsuario repositorioUsuario;
+    private UsuarioRepository usuarioRepository;
 
     public List<Usuario> findAllUsuarios() {
-        return repositorioUsuario.findAll();
+        return usuarioRepository.findAll();
     }
 
     public List<Usuario> findAllUsuariosActivos() {
-        var usuarios = this.repositorioUsuario.findAll();
+        var usuarios = this.usuarioRepository.findAll();
         var listado = new ArrayList<Usuario>();
         for (var usuario : usuarios) {
             if (usuario.isActivo()) {
@@ -33,17 +34,17 @@ public class ServicioUsuario {
 
 
     public Usuario findUsuarioById(Integer usuarioId) {
-        return repositorioUsuario.findById(usuarioId)
+        return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
     }
 
     public Usuario createUsuario(Usuario usuario) {
-        return repositorioUsuario.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     public Usuario updateUsuario(Integer usuarioId, Usuario usuarioDetails) {
 
-        Usuario usuario = repositorioUsuario.findById(usuarioId)
+        Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
 
         usuario.setNombre(usuarioDetails.getNombre());
@@ -54,7 +55,7 @@ public class ServicioUsuario {
         usuario.setActivo(usuarioDetails.isActivo());
 
         if (!(usuario.getCorreo().equals(usuarioDetails.getCorreo()))){
-            if (repositorioUsuario.existsByCorreo(usuarioDetails.getCorreo())) {
+            if (usuarioRepository.existsByCorreo(usuarioDetails.getCorreo())) {
                 throw new ResourceNotFoundException("Usuario", "correo", usuarioDetails.getCorreo());
             } else {
             usuario.setCorreo(usuarioDetails.getCorreo());
@@ -62,14 +63,14 @@ public class ServicioUsuario {
         }
 
 
-        return repositorioUsuario.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     public ResponseEntity<?> softDeleteUsuario(Integer usuarioId) {
-        Usuario usuario = repositorioUsuario.findById(usuarioId)
+        Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
         usuario.setActivo(false);
-        repositorioUsuario.save(usuario);
+        usuarioRepository.save(usuario);
         return ResponseEntity.ok().build();
     }
 }
