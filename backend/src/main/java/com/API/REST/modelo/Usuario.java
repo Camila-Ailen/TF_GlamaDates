@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -17,20 +15,40 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Usuario {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_usuario", nullable = false, unique = true)
-    private Integer id;
+    private long id;
+
+    @Basic
     @Column(name = "nombre_usuario", length = 100, nullable = false)
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
+
+    @Basic
     @Column(name = "apellido_usuario", length = 100, nullable = false)
+    @NotBlank(message = "El apellido es obligatorio")
     private String apellido;
+
+    @Basic
     @Column(name = "correo_usuario", length = 100, nullable = false, unique = true)
+    @NotBlank(message = "El correo es obligatorio")
     private String correo;
+
+    @Basic
     @Column(name = "clave_usuario", length = 100, nullable = false)
+    @NotBlank(message = "La clave es obligatoria")
     private String clave;
+
+    @Basic
     @Column(name = "telefono_usuario", length = 20, nullable = false)
+    @NotBlank(message = "El telefono es obligatorio")
     private String telefono;
+
+    @Basic
     @Column(name = "fecha_nacimiento_usuario", nullable = false)
+    @NotBlank(message = "La fecha de nacimiento es obligatoria")
     private LocalDate fechaNacimiento;
-    @Column(name = "activo", nullable = false)
+
+    // Para uso en la logica
     private boolean activo;
 }
