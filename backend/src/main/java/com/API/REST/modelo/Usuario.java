@@ -49,6 +49,12 @@ public class Usuario {
     @NotBlank(message = "La fecha de nacimiento es obligatoria")
     private LocalDate fechaNacimiento;
 
-    // Para uso en la logica
+    @Basic
+    @Column(name = "activo_usuario", nullable = false)
     private boolean activo;
+
+    //ENUMS
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sexo_usuario", nullable = false)
+    private Sexo sexo;
 }
