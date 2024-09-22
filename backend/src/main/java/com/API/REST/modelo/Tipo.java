@@ -21,4 +21,10 @@ public class Tipo {
     @Basic
     @Column(name = "nombre_tipo", length = 100, nullable = false)
     private String nombre;
+
+    //RELACIONES
+    //Un tipo tiene muchos productos
+    @OneToMany(mappedBy = "unTipo", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Producto unProducto;
+
 }

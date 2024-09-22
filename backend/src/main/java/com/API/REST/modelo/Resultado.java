@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "resultado")
@@ -24,4 +25,15 @@ public class Resultado {
     @Basic
     @Column(name = "comentario_resultado", length = 100, nullable = false)
     private String comentario;
+
+    //RELACIONES
+    //Un resultado pertenece a un turno
+    @OneToOne
+    @JoinColumn(name = "fk_turno", nullable = false)
+    private Turno unTurno;
+
+    //Un resultado tiene muchas imagenes
+    @OneToMany
+    @JoinColumn(name = "entidad_id", referencedColumnName = "id_resultado")
+    private Set<Imagen> imagenes;
 }

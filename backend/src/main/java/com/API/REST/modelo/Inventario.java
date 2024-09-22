@@ -31,5 +31,11 @@ public class Inventario {
     @Column(name = "estado_inventario", nullable = false)
     private InventarioEstado estado;
 
+    //RELACIONES
+    //muchos inventarios tienen un producto
+    @ManyToOne
+    @JoinColumn(name = "fk_producto", nullable = false)
+    private Producto unProducto;
+
 
 }

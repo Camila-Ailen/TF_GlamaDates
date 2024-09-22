@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
@@ -57,4 +58,19 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     @Column(name = "sexo_usuario", nullable = false)
     private Sexo sexo;
+
+
+    //RELACIONES
+    //Un cliente tiene muchos turnos
+    @OneToMany(mappedBy = "cliente")
+    private Set<Turno> turnosComoCliente;
+
+    //Un profesional tiene muchos turnos
+    @OneToMany(mappedBy = "profesional")
+    private Set<Turno> turnosComoProfesional;
+
+    //Un usuario puede tener muchas imagenes
+    @OneToMany
+    @JoinColumn(name = "entidad_id", referencedColumnName = "id_usuario")
+    private Set<Imagen> imagenes;
 }

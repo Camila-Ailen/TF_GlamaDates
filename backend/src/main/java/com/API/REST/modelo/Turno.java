@@ -32,4 +32,30 @@ public class Turno {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_turno", nullable = false)
     private TurnoEstado estado;
+
+    //RELACIONES
+    //Un turno puede tener, o no, un resultado
+    @OneToOne(mappedBy = "unTurno", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Resultado unResultado;
+
+    //Muchos turnos pueden pertenecer a un paquete
+    @ManyToOne
+    @JoinColumn(name = "fk_paquete", nullable = false)
+    private Paquete unPaquete;
+
+    //Muchos turnos pueden pertenecer a un cliente
+    @ManyToOne
+    @JoinColumn(name = "fk_cliente", nullable = false)
+    private Usuario cliente;
+
+    //Muchos turnos pueden pertenecer a un profesional
+    @ManyToOne
+    @JoinColumn(name = "fk_profesional", nullable = false)
+    private Usuario profesional;
+
+    //Muchos turnos pueden pertenecer a una estacion
+    @ManyToOne
+    @JoinColumn(name = "fk_estacion", nullable = false)
+    private Estacion unaEstacion;
+
 }

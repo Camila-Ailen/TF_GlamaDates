@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "categoria")
@@ -25,8 +26,33 @@ public class Categoria {
     @Column(name = "observaciones_categoria", length = 100, nullable = true)
     private String observaciones;
 
+
     //RELACIONES
-    /*
-    conectar con categoria padre, imagen, estacion, producto y servicio
-     */
+    //una categoria tiene muchos productos
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "unaCategoria")
+    private Set<Producto> listaProductos;
+
+    //una categoria tiene muchos servicios
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "unaCategoria")
+    private Set<Servicio> listaServicios;
+
+    //una categoria tiene muchas categorias
+    @ManyToOne
+    @JoinColumn(name = "fk_categoria_padre", nullable = true)
+    private Categoria categoriaPadre;
+
+    //muchas categorias tiene muchas estaciones
+    @ManyToMany
+    @JoinTable(
+            name = "categoria_estacion",
+            joinColumns = @JoinColumn(name = "fk_categoria"),
+            inverseJoinColumns = @JoinColumn(name = "fk_estacion")
+    )
+    private Set<Estacion> listaEstaciones;
+
+    //una categoria tiene muchas imagenes
+    @OneToMany
+    @JoinColumn(name = "entidad_id", referencedColumnName = "id_usuario")
+    private Set<Imagen> imagenes;
+
 }

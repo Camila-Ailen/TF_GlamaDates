@@ -34,5 +34,18 @@ public class Paquete {
     @Column(name = "duracion_paquete", nullable = false)
     private int duracion;
 
+    //RELACIONES
+    //Un paquete tiene muchos turnos
+    @OneToMany(mappedBy = "unPaquete", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Turno unTurno;
+
+    //Muchos paquetes pueden tener muchos servicios
+    @ManyToMany
+    @JoinTable(
+            name = "paquete_servicio",
+            joinColumns = @JoinColumn(name = "fk_paquete"),
+            inverseJoinColumns = @JoinColumn(name = "fk_servicio")
+    )
+    private Servicio unServicio;
 
 }

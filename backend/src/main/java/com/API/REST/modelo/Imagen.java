@@ -25,4 +25,12 @@ public class Imagen {
     @Basic
     @Column(name = "url_imagen", length = 100, nullable = false)
     private String url;
+
+    @Basic
+    @Column(name = "tipo_entidad", nullable = false)
+    private String tipoEntidad;
+
+    @Basic
+    @Column(name = "entidad_id", nullable = false)
+    private long entidadId;
 }

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -33,4 +34,20 @@ public class Servicio {
     @Basic
     @Column(name = "precio_servicio", nullable = false)
     private double precio;
+
+
+    //RELACIONES
+    //Muchos servicios pueden ser una una categoria
+    @ManyToOne
+    @JoinColumn(name = "fk_categoria", nullable = false)
+    private Categoria unaCategoria;
+
+    //Muchos servicios pueden pertenecer a muchos paquetes
+    @ManyToMany(mappedBy = "unServicio")
+    private Paquete unPaquete;
+
+    //Un servicio tiene muchas imagenes
+    @OneToMany
+    @JoinColumn(name = "entidad_id", referencedColumnName = "id_servicio")
+    private Set<Imagen> imagenes;
 }
