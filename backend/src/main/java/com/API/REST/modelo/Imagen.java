@@ -23,7 +23,7 @@ public class Imagen {
     private String nombre;
 
     @Basic
-    @Column(name = "url_imagen", length = 100, nullable = false)
+    @Column(name = "url_imagen", length = 255, nullable = false)
     private String url;
 
     @Basic
@@ -33,4 +33,11 @@ public class Imagen {
     @Basic
     @Column(name = "entidad_id", nullable = false)
     private long entidadId;
+/*
+    //RELACIONES
+    @ManyToOne
+    @JoinColumn(name = "entidad_id", insertable = false, updatable = false)
+    private EntidadConImagen entidad;
+
+ */
 }

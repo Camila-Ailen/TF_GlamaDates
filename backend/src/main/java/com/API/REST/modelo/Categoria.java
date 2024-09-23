@@ -50,9 +50,4 @@ public class Categoria {
     )
     private Set<Estacion> listaEstaciones;
 
-    //una categoria tiene muchas imagenes
-    @OneToMany
-    @JoinColumn(name = "entidad_id", referencedColumnName = "id_usuario")
-    private Set<Imagen> imagenes;
-
 }

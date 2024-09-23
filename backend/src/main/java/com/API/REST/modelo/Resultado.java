@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Resultado {
+public class Resultado{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_resultado", nullable = false, unique = true)
@@ -32,8 +32,4 @@ public class Resultado {
     @JoinColumn(name = "fk_turno", nullable = false)
     private Turno unTurno;
 
-    //Un resultado tiene muchas imagenes
-    @OneToMany
-    @JoinColumn(name = "entidad_id", referencedColumnName = "id_resultado")
-    private Set<Imagen> imagenes;
 }

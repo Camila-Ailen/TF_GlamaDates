@@ -22,10 +22,13 @@ public class UsuarioController {
         return usuarioService.findAllUsuarios();
     }
 
+    /*
     @GetMapping("/usuarios")
     public List<Usuario> getAllUsuariosActivos() {
         return usuarioService.findAllUsuariosActivos();
     }
+
+     */
 
     @GetMapping("/usuarios/{id}")
     public Usuario getUsuarioById(@PathVariable(value = "id") Integer usuarioId) {
@@ -37,6 +40,7 @@ public class UsuarioController {
         return usuarioService.createUsuario(usuario);
     }
 
+    /*
     @PutMapping("/usuarios/{id}")
     public Usuario putUsuario(@PathVariable(value = "id") Integer usuarioId,
                               @Valid @RequestBody Usuario usuarioDetails) {
@@ -47,5 +51,7 @@ public class UsuarioController {
     public ResponseEntity<?> deleteUsuario(@PathVariable(value = "id") Integer usuarioId) {
         return usuarioService.softDeleteUsuario(usuarioId);
     }
+
+     */
 
 }

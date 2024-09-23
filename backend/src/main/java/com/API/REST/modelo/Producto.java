@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Producto {
+public class Producto{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_producto", nullable = false, unique = true)
@@ -29,7 +29,7 @@ public class Producto {
     //RELACIONES
     //Un producto tiene muchos inventarios
     @OneToMany(mappedBy = "unProducto", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Inventario unInventario;
+    private Set<Inventario> listaInventarios;
 
     //Muchos productos pertenecen a una categoria
     @ManyToOne
@@ -46,8 +46,4 @@ public class Producto {
     @JoinColumn(name = "fk_tipo", nullable = false)
     private Tipo unTipo;
 
-    //Un producto tiene muchas imagenes
-    @OneToMany
-    @JoinColumn(name = "entidad_id", referencedColumnName = "id_producto")
-    private Set<Imagen> imagenes;
 }

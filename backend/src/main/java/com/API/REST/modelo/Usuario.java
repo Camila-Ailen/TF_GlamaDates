@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -18,7 +20,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_usuario", nullable = false, unique = true)
-    private long id;
+    private int id;
 
     @Basic
     @Column(name = "nombre_usuario", length = 100, nullable = false)
@@ -47,11 +49,11 @@ public class Usuario {
 
     @Basic
     @Column(name = "fecha_nacimiento_usuario", nullable = false)
-    @NotBlank(message = "La fecha de nacimiento es obligatoria")
-    private LocalDate fechaNacimiento;
+    @NotNull(message = "La fecha de nacimiento es obligatoria")
+    private Date fechaNacimiento;
 
     @Basic
-    @Column(name = "activo_usuario", nullable = false)
+    @Column(name = "active_usuario", nullable = false)
     private boolean activo;
 
     //ENUMS
@@ -69,8 +71,4 @@ public class Usuario {
     @OneToMany(mappedBy = "profesional")
     private Set<Turno> turnosComoProfesional;
 
-    //Un usuario puede tener muchas imagenes
-    @OneToMany
-    @JoinColumn(name = "entidad_id", referencedColumnName = "id_usuario")
-    private Set<Imagen> imagenes;
 }

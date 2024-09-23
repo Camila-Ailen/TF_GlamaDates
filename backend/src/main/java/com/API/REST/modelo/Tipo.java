@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -25,6 +26,6 @@ public class Tipo {
     //RELACIONES
     //Un tipo tiene muchos productos
     @OneToMany(mappedBy = "unTipo", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Producto unProducto;
+    private Set<Producto> listaProductos;
 
 }

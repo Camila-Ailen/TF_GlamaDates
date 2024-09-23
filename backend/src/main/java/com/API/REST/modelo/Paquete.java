@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -37,7 +38,7 @@ public class Paquete {
     //RELACIONES
     //Un paquete tiene muchos turnos
     @OneToMany(mappedBy = "unPaquete", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Turno unTurno;
+    private Set<Turno> unTurno;
 
     //Muchos paquetes pueden tener muchos servicios
     @ManyToMany
@@ -46,6 +47,6 @@ public class Paquete {
             joinColumns = @JoinColumn(name = "fk_paquete"),
             inverseJoinColumns = @JoinColumn(name = "fk_servicio")
     )
-    private Servicio unServicio;
+    private Set<Servicio> listaServicios;
 
 }

@@ -43,11 +43,7 @@ public class Servicio {
     private Categoria unaCategoria;
 
     //Muchos servicios pueden pertenecer a muchos paquetes
-    @ManyToMany(mappedBy = "unServicio")
-    private Paquete unPaquete;
+    @ManyToMany(mappedBy = "listaServicios")
+    private Set<Paquete> listaPaquetes;
 
-    //Un servicio tiene muchas imagenes
-    @OneToMany
-    @JoinColumn(name = "entidad_id", referencedColumnName = "id_servicio")
-    private Set<Imagen> imagenes;
 }

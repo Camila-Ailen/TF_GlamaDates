@@ -21,6 +21,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    /*
     public List<Usuario> findAllUsuariosActivos() {
         var usuarios = this.usuarioRepository.findAll();
         var listado = new ArrayList<Usuario>();
@@ -31,6 +32,7 @@ public class UsuarioService {
         }
         return listado;
     }
+     */
 
 
     public Usuario findUsuarioById(Integer usuarioId) {
@@ -42,6 +44,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    /*
     public Usuario updateUsuario(Integer usuarioId, Usuario usuarioDetails) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -73,4 +76,6 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
         return ResponseEntity.ok().build();
     }
+
+     */
 }
