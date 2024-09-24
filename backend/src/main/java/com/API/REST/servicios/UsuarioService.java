@@ -21,7 +21,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    /*
+
     public List<Usuario> findAllUsuariosActivos() {
         var usuarios = this.usuarioRepository.findAll();
         var listado = new ArrayList<Usuario>();
@@ -32,7 +32,7 @@ public class UsuarioService {
         }
         return listado;
     }
-     */
+
 
 
     public Usuario findUsuarioById(Integer usuarioId) {
@@ -41,8 +41,13 @@ public class UsuarioService {
     }
 
     public Usuario createUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
+            throw new ResourceNotFoundException("Usuario", "correo", usuario.getCorreo());
+        } else {
+            return usuarioRepository.save(usuario);
+        }
     }
+
 
     /*
     public Usuario updateUsuario(Integer usuarioId, Usuario usuarioDetails) {
@@ -56,6 +61,8 @@ public class UsuarioService {
         usuario.setClave(usuarioDetails.getClave());
         usuario.setTelefono(usuarioDetails.getTelefono());
         usuario.setActivo(usuarioDetails.isActivo());
+        usuario.setSexo(usuarioDetails.getSexo());
+
 
         if (!(usuario.getCorreo().equals(usuarioDetails.getCorreo()))){
             if (usuarioRepository.existsByCorreo(usuarioDetails.getCorreo())) {
@@ -64,10 +71,10 @@ public class UsuarioService {
             usuario.setCorreo(usuarioDetails.getCorreo());
             }
         }
-
-
         return usuarioRepository.save(usuario);
     }
+
+
 
     public ResponseEntity<?> softDeleteUsuario(Integer usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -77,5 +84,5 @@ public class UsuarioService {
         return ResponseEntity.ok().build();
     }
 
-     */
+*/
 }
