@@ -2,6 +2,7 @@ package com.API.REST.controlador;
 
 import com.API.REST.modelo.Usuario;
 import com.API.REST.servicios.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,10 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("/usuarioAPI")
-
+@RequiredArgsConstructor
 public class UsuarioController {
     @Autowired
-    UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     @GetMapping("/todoUsuarios")
     public List<Usuario> getAllUsuarios() {
@@ -28,8 +29,6 @@ public class UsuarioController {
         return usuarioService.findAllUsuariosActivos();
     }
 
-
-
     @GetMapping("/usuarios/{id}")
     public Usuario getUsuarioById(@PathVariable(value = "id") Integer usuarioId) {
         return usuarioService.findUsuarioById(usuarioId);
@@ -37,7 +36,7 @@ public class UsuarioController {
 
     @PostMapping("/usuarios")
     public Usuario postUsuario(@Valid @RequestBody Usuario usuario) {
-        return usuarioService.createUsuario(usuario);
+        return usuarioService.saveUsuario(usuario);
     }
 
 /*

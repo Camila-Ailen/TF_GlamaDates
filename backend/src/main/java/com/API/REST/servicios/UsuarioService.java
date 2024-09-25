@@ -3,8 +3,10 @@ package com.API.REST.servicios;
 import com.API.REST.exception.ResourceNotFoundException;
 import com.API.REST.modelo.Usuario;
 import com.API.REST.repositorio.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -12,10 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Usuario> findAllUsuarios() {
         return usuarioRepository.findAll();
@@ -40,10 +44,11 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
     }
 
-    public Usuario createUsuario(Usuario usuario) {
+    public Usuario saveUsuario(Usuario usuario) {
         if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
             throw new ResourceNotFoundException("Usuario", "correo", usuario.getCorreo());
         } else {
+            usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             return usuarioRepository.save(usuario);
         }
     }

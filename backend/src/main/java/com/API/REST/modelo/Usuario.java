@@ -1,5 +1,6 @@
 package com.API.REST.modelo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,10 +15,10 @@ import java.util.Set;
 @Entity
 @Table(name = "usuario",
         uniqueConstraints = @UniqueConstraint(columnNames = "correo_usuario"))
-
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -83,5 +84,11 @@ public class Usuario {
     //Un profesional tiene muchos turnos
     @OneToMany(mappedBy = "profesional")
     private Set<Turno> turnosComoProfesional;
+
+    //Muchos usuarios tienen muchos roles
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
+    private Rol unRol;
+
 
 }
