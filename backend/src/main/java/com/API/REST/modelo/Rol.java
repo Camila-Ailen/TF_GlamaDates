@@ -1,5 +1,8 @@
 package com.API.REST.modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,8 +30,18 @@ public class Rol {
     private String descripcion;
 
     //RELACIONES
-    //Un rol tiene muchos usuarios
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "unRol")
+    //Muchos roles tienen muchos usuarios
+    @ManyToMany(mappedBy = "listaRoles")
+    @JsonBackReference
     private Set<Usuario> listaUsuarios;
+
+    //Muchos roles tienen muchos permisos
+    @ManyToMany
+    @JoinTable(
+            name = "rol_permiso",
+            joinColumns = @JoinColumn(name = "id_rol"),
+            inverseJoinColumns = @JoinColumn(name = "id_permiso"))
+    @JsonManagedReference
+    private Set<Permiso> listaPermisos;
 
 }

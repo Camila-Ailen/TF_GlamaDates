@@ -1,5 +1,7 @@
 package com.API.REST.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -77,18 +80,26 @@ public class Usuario {
 
 
     //RELACIONES
+    //Muchos usuarios tienen muchos roles
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_rol",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_rol"))
+    @JsonManagedReference
+    private Set<Rol> listaRoles = new HashSet<>();
+
     //Un cliente tiene muchos turnos
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private Set<Turno> turnosComoCliente;
 
     //Un profesional tiene muchos turnos
     @OneToMany(mappedBy = "profesional")
+    @JsonIgnore
     private Set<Turno> turnosComoProfesional;
 
-    //Muchos usuarios tienen muchos roles
-    @ManyToOne
-    @JoinColumn(name = "rol_id")
-    private Rol unRol;
+
 
 
 }
