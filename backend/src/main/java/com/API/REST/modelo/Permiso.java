@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Permiso {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_permiso", nullable = false, unique = true)
     private long id;
 
