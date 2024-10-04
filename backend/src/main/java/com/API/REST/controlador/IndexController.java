@@ -10,7 +10,8 @@ public class IndexController {
 
     @GetMapping
     public String sayHello() {
-        return "home";
+        System.out.println("Estoy en el index que lleva a la vista del admin");
+        return "admin/principal";
     }
 
 }

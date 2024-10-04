@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,22 +14,34 @@ import java.util.List;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/usuarioAPI")
+@RequestMapping("/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
     @Autowired
     private final UsuarioService usuarioService;
-
+/*
     @GetMapping("/todoUsuarios")
     public List<Usuario> getAllUsuarios() {
         return usuarioService.findAllUsuarios();
     }
 
-
     @GetMapping("/usuarios")
     public List<Usuario> getAllUsuariosActivos() {
         return usuarioService.findAllUsuariosActivos();
     }
+
+ */
+
+// Este ya es como el de Biale
+    @GetMapping()
+    public String index (Model modelo){
+        System.out.println("Estoy en el index que lleva a la vista de usuarios");
+        var usuarios = usuarioService.findAllUsuarios();
+        System.out.println("Estos son los usuarios desde el controlador: " + usuarios);
+        modelo.addAttribute("usuarios", usuarios);
+        return "admin/usuarios";
+    }
+
 
     @GetMapping("/usuarios/{id}")
     public Usuario getUsuarioById(@PathVariable(value = "id") Integer usuarioId) {

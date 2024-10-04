@@ -30,8 +30,8 @@ public class Rol {
     private String descripcion;
 
     //RELACIONES
-    //Muchos roles tienen muchos usuarios
-    @ManyToMany(mappedBy = "listaRoles")
+    //Un rol tiene muchos usuarios
+    @OneToMany(mappedBy = "unRol")
     @JsonBackReference
     private Set<Usuario> listaUsuarios;
 

@@ -63,7 +63,7 @@ public class Usuario {
 
     @Basic
     @Column(name = "active_usuario", nullable = false)
-    private boolean activo;
+    private boolean activo = true;
 
     //ENUMS
     @Enumerated(EnumType.STRING)
@@ -80,14 +80,11 @@ public class Usuario {
 
 
     //RELACIONES
-    //Muchos usuarios tienen muchos roles
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "usuario_rol",
-            joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_rol"))
+    //Muchos usuarios tienen un rol
+    @ManyToOne
+    @JoinColumn(name = "fk_rol")
     @JsonManagedReference
-    private Set<Rol> listaRoles = new HashSet<>();
+    private Rol unRol;
 
     //Un cliente tiene muchos turnos
     @OneToMany(mappedBy = "cliente")

@@ -22,11 +22,15 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
 
     public List<Usuario> findAllUsuarios() {
-        return usuarioRepository.findAll();
+        var usuarios = this.usuarioRepository.findAll();
+        System.out.println("Estos son los usuarios desde el servicio: " + usuarios);
+        return usuarios;
     }
 
 
     public List<Usuario> findAllUsuariosActivos() {
+        return usuarioRepository.findByActivo(true);
+        /*
         var usuarios = this.usuarioRepository.findAll();
         var listado = new ArrayList<Usuario>();
         for (var usuario : usuarios) {
@@ -35,6 +39,8 @@ public class UsuarioService {
             }
         }
         return listado;
+
+         */
     }
 
 

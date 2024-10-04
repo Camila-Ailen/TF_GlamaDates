@@ -16,11 +16,18 @@ public class SecurityUser implements UserDetails {
 
     private Usuario usuario;
 
+    /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return usuario.getListaRoles().stream()
-                .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
+        return usuario.getUnRol().getListaPermisos().stream()
+                .map(permiso -> new SimpleGrantedAuthority(permiso.getNombre()))
                 .collect(Collectors.toList());
+    }
+
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(usuario.getUnRol().getNombre()));
     }
 
     @Override
