@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,10 +58,11 @@ public class Usuario {
     private String telefono;
 
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha_nacimiento_usuario", nullable = false)
     @NotNull(message = "La fecha de nacimiento es obligatoria")
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Basic
     @Column(name = "active_usuario", nullable = false)

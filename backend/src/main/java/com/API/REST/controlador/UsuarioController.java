@@ -1,16 +1,17 @@
 package com.API.REST.controlador;
 
+import com.API.REST.modelo.Sexo;
 import com.API.REST.modelo.Usuario;
+import com.API.REST.servicios.RolService;
 import com.API.REST.servicios.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @CrossOrigin
@@ -19,6 +20,8 @@ import java.util.List;
 public class UsuarioController {
     @Autowired
     private final UsuarioService usuarioService;
+    @Autowired
+    private final RolService rolService;
 /*
     @GetMapping("/todoUsuarios")
     public List<Usuario> getAllUsuarios() {
@@ -35,12 +38,23 @@ public class UsuarioController {
 // Este ya es como el de Biale
     @GetMapping()
     public String index (Model modelo){
-        System.out.println("Estoy en el index que lleva a la vista de usuarios");
         var usuarios = usuarioService.findAllUsuarios();
-        System.out.println("Estos son los usuarios desde el controlador: " + usuarios);
+        var roles = rolService.findAllRoles();
+        var sexos = Sexo.values();
         modelo.addAttribute("usuarios", usuarios);
+        modelo.addAttribute("roles", roles);
+        modelo.addAttribute("sexos", sexos);
         return "admin/usuarios";
     }
+
+    @GetMapping("/usuarios/crear")
+    public String nuevoUsuario(Model modelo) {
+        var usuario = new Usuario();
+        modelo.addAttribute("modal", true);
+        return "/usuarios";
+    }
+
+
 
 
     @GetMapping("/usuarios/{id}")
@@ -48,12 +62,29 @@ public class UsuarioController {
         return usuarioService.findUsuarioById(usuarioId);
     }
 
-    @PostMapping("/usuarios")
-    public Usuario postUsuario(@Valid @RequestBody Usuario usuario) {
-        return usuarioService.saveUsuario(usuario);
+    @PostMapping()
+    public String postUsuario(@Valid @ModelAttribute Usuario usuario) {
+        if (usuario.getClave() == null || usuario.getClave().isEmpty()) {
+            usuario.setClave("12345678");
+        }
+        //pasar el estado activo
+        usuario.setActivo(true);
+        usuarioService.saveUsuario(usuario);
+        return "admin/usuarios";
     }
 
 /*
+@PostMapping("/usuarios")
+    public Usuario postUsuario(@Valid @ModelAttribute Usuario usuario) {
+        if (usuario.getClave() == null || usuario.getClave().isEmpty()) {
+            usuario.setClave("12345678");
+        }
+        //pasar el estado activo
+        usuario.setActivo(true);
+        return usuarioService.saveUsuario(usuario);
+    }
+
+
     @PutMapping("/usuarios/{id}")
     public Usuario putUsuario(@PathVariable(value = "id") Integer usuarioId,
                               @Valid @RequestBody Usuario usuarioDetails) {
