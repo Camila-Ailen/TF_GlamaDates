@@ -1,5 +1,6 @@
 package com.API.REST.servicios;
 
+import com.API.REST.exception.ResourceAlreadyExistsException;
 import com.API.REST.exception.ResourceNotFoundException;
 import com.API.REST.modelo.Usuario;
 import com.API.REST.repositorio.UsuarioRepository;
@@ -52,7 +53,7 @@ public class UsuarioService {
 
     public Usuario saveUsuario(Usuario usuario) {
         if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
-            throw new ResourceNotFoundException("Usuario", "correo", usuario.getCorreo());
+            throw new ResourceAlreadyExistsException("Usuario", "correo", usuario.getCorreo());
         } else {
             usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             return usuarioRepository.save(usuario);

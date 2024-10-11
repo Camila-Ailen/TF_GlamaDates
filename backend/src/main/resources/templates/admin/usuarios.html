@@ -10,55 +10,8 @@
     <!-- Flowbite JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 
-    <script>
-        function showNotification(message, type = 'success') {
-            const messageContainer = document.createElement('div');
-            messageContainer.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
-            messageContainer.style.zIndex = 9999; // Asegúrate de que el z-index sea alto
-            messageContainer.textContent = message;
-            document.body.appendChild(messageContainer);
-
-            setTimeout(() => {
-                messageContainer.remove();
-            }, 3000);
-        }
-
-        function loadContent(url) {
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('main-content').innerHTML = html;
-                })
-                .catch(error => console.error('Error loading content:', error));
-        }
-
-
-    //recargar la tabla de usuarios
-
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: form.method,
-                body: formData,
-            })
-                .then(response => {
-                    if (response.ok) {
-                        showNotification('Usuario creado exitosamente');
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3000); // Espera 3 segundos antes de recargar la página
-                    } else {
-                        showNotification('Error al agregar usuario', 'error');
-                    }
-                })
-                .catch(error => {
-                    showNotification('Error: ' + error.message, 'error');
-                });
-        }
-    </script>
+    <!-- Incluye el archivo js de usuarios -->
+    <script src="/admin/usuarios.js" defer></script>
 
 
 </head>
@@ -829,7 +782,7 @@
                             <script>
                                 console.log('Estoy en la vista de usuarios antes del boton de agregar usuario');
                             </script>
-                                <button id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="bloc bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="button">
+                                <button id="crearUsuarioButton" data-modal-target="crearUsuario" data-modal-toggle="crearUsuario" class="bloc bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="button">
                                     <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                         <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                     </svg>
@@ -837,81 +790,8 @@
                                 </button>
 
                             <!-- Modal de agregar usuario -->
-                            <script>
-                                console.log('Estoy en la vista de usuarios antes de abrir el modal');
-                            </script>
-                                <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-                                    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                                        <!-- Modal content -->
-                                        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                                            <!-- Modal header -->
-                                            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                    Agregar Usuario
-                                                </h3>
-                                                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="defaultModal">
-                                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                                    <span class="sr-only">Close modal</span>
-                                                </button>
-                                            </div>
-                                            <!-- Modal body -->
-                                            <form th:action="@{/usuarios}" th:object="${usuario}" th:method="post" onsubmit="handleFormSubmit(event)">
-                                                <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                                                    <div>
-                                                        <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                                                        <input type="text" name="nombre" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Juan" required="">
-                                                    </div>
-                                                    <div>
-                                                        <label for="apellido" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
-                                                        <input type="text" name="apellido" id="apellido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Perez" required="">
-                                                    </div>
-                                                    <<!-- clave por defecto -->>
-                                                    <div type="hidden">
-                                                        <input type="hidden" name="clave" value="12345678" />
-                                                    </div>
+                            <div th:replace="admin/modalesUsuarios :: modalCrearUsuario"></div>
 
-                                                    <div>
-                                                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                                        <input type="email" name="correo" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="juan@perez.com" required="">
-                                                    </div>
-                                                    <div>
-                                                        <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telefono</label>
-                                                        <input type="text" name="telefono" id="telefono" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="3758112233">
-                                                    </div>
-                                                    <div>
-                                                        <label for="fechaNac" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de nacimiento</label>
-                                                        <input type="date" name="fechaNacimiento" id="fechaNac" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required="">
-                                                    </div>
-                                                    <div>
-
-                                                        <label for="sexo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sexo</label>
-                                                        <select id="sexo" name="sexo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                            <option selected="">Seleccionar sexo</option>
-                                                            <script>
-                                                                console.log('Estoy en la vista de usuarios antes de traer los sxos del modal');
-                                                            </script>
-                                                            <option th:each="sexo : ${sexos}" th:value="${sexo}" th:text="${sexo}"></option>
-                                                        </select>
-                                                    </div>
-                                                    <div>
-                                                        <label for="rol" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                                                        <select id="rol" name="unRol" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                            <option selected="">Seleccionar rol</option>
-                                                            <script>
-                                                                console.log('Estoy en la vista de usuarios antes de traer los roles del modal');
-                                                            </script>
-                                                            <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                                    <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                                                    Agregar usuario
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             <script>
                                 console.log('Estoy en la vista de usuarios antes de crear la tabla, todavia cabecera');
                             </script>
