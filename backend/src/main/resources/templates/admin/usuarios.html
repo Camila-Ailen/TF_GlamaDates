@@ -887,7 +887,7 @@
                                 <td th:text="${usuario.unRol.nombre}">Rol</td>
                                 <td th:text="${usuario.activo}">Activo</td>
                                 <td>
-                                    <form th:action="@{/usuarios/{id}/editar(id=${usuario.getId()})}" th:method="get">
+                                    <form th:action="@{'/usuarios/' + ${usuario.id} + '/editar'}" th:method="get">
                                         <button class="btn btn-success">Editar</button>
                                     </form>
                                 </td>

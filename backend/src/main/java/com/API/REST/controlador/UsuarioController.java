@@ -1,5 +1,6 @@
 package com.API.REST.controlador;
 
+import com.API.REST.modelo.Rol;
 import com.API.REST.modelo.Sexo;
 import com.API.REST.modelo.Usuario;
 import com.API.REST.servicios.RolService;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @CrossOrigin
@@ -56,11 +58,15 @@ public class UsuarioController {
 
 
 
+/*
+
 
     @GetMapping("/usuarios/{id}")
     public Usuario getUsuarioById(@PathVariable(value = "id") Integer usuarioId) {
         return usuarioService.findUsuarioById(usuarioId);
     }
+
+ */
 
     @PostMapping()
     public String postUsuario(@Valid @ModelAttribute Usuario usuario) {
@@ -71,6 +77,29 @@ public class UsuarioController {
         usuario.setActivo(true);
         usuarioService.saveUsuario(usuario);
         return "admin/usuarios";
+    }
+
+    @GetMapping("/{id}/editar")
+    public String editarUsuario(@PathVariable("id") Integer id, Model modelo) {
+        Usuario usuario = usuarioService.findUsuarioById(id);
+        List<Rol> roles = rolService.findAllRoles();
+        Sexo[] sexos = Sexo.values();
+        modelo.addAttribute("usuario", usuario);
+        modelo.addAttribute("roles", roles);
+        modelo.addAttribute("sexos", sexos);
+        return "admin/usuarioModificar";
+    }
+
+    @PutMapping("/{id}")
+    public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado) {
+        System.out.println("Entre al controlador de usuario");
+        if (resultado.hasErrors()) {
+            System.out.println("Hay errores");
+            return "admin/usuarioModificar";
+        }
+        System.out.println("voy a llamar al servicio");
+        usuarioService.updateUsuario(id, usuario);
+        return "redirect:/usuarios";
     }
 
 /*

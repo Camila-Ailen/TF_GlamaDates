@@ -61,29 +61,36 @@ public class UsuarioService {
     }
 
 
-    /*
-    public Usuario updateUsuario(Integer usuarioId, Usuario usuarioDetails) {
 
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
+    public void updateUsuario(int usuarioId, Usuario usuarioDetails) {
+        System.out.println("Entre al servicio");
+        usuarioRepository.findById(usuarioId)
+                .ifPresent(usuarioObtenido -> {
+                    usuarioObtenido.setNombre(usuarioDetails.getNombre());
+                    usuarioObtenido.setApellido(usuarioDetails.getApellido());
+                    usuarioObtenido.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
+                    usuarioObtenido.setTelefono(usuarioDetails.getTelefono());
+                    usuarioObtenido.setActivo(usuarioDetails.isActivo());
+                    usuarioObtenido.setSexo(usuarioDetails.getSexo());
+                    if (!(usuarioObtenido.getCorreo().equals(usuarioDetails.getCorreo()))){
+                        if (usuarioRepository.existsByCorreo(usuarioDetails.getCorreo())) {
+                            throw new ResourceNotFoundException("Usuario", "correo", usuarioDetails.getCorreo());
+                        } else {
+                            usuarioObtenido.setCorreo(usuarioDetails.getCorreo());
+                        }
+                    }
+                    usuarioRepository.save(usuarioObtenido);
+                });
 
-        usuario.setNombre(usuarioDetails.getNombre());
-        usuario.setApellido(usuarioDetails.getApellido());
-        usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
-        usuario.setClave(usuarioDetails.getClave());
-        usuario.setTelefono(usuarioDetails.getTelefono());
-        usuario.setActivo(usuarioDetails.isActivo());
-        usuario.setSexo(usuarioDetails.getSexo());
-
-
-        if (!(usuario.getCorreo().equals(usuarioDetails.getCorreo()))){
-            if (usuarioRepository.existsByCorreo(usuarioDetails.getCorreo())) {
-                throw new ResourceNotFoundException("Usuario", "correo", usuarioDetails.getCorreo());
-            } else {
-            usuario.setCorreo(usuarioDetails.getCorreo());
-            }
-        }
-        return usuarioRepository.save(usuario);
+    }
+/*
+    public void actualizarPersonaPorId(int id, Persona persona) {
+        personaRepositorio.findById(id).
+                ifPresent(personaObtenida -> {
+                    personaObtenida.setApellidos(persona.getApellidos());
+                    personaObtenida.setNombres(persona.getNombres());
+                    personaRepositorio.save(personaObtenida);
+                });
     }
 
 
