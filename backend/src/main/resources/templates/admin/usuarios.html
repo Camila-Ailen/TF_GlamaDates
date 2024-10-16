@@ -20,6 +20,17 @@
     <!-- Mensaje de éxito -->
     <div th:if="${mensaje}" th:text="${mensaje}" id="flash-message" class="hidden"></div>
 
+    <!-- mensaje de eliminacion -->
+    <!-- Mostrar mensaje de éxito -->
+    <div th:if="${mensaje}" class="alert alert-success">
+        <p th:text="${mensaje}"></p>
+    </div>
+
+    <!-- Mostrar mensaje de error -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
+
 
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
         <div class="flex flex-wrap justify-between items-center">
@@ -896,9 +907,12 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <form th:action="@{/usuarios/{id}(id=${usuario.getId()})}" th:method="delete">
+                                    <form th:action="@{/usuarios/{id}(id=${usuario.id})}" th:method="post" th:data-id="${usuario.id}" th:data-nombre="${usuario.nombre}" th:data-apellido="${usuario.apellido}" onsubmit="return confirmDelete(this)">
+                                        <input type="hidden" name="_method" value="delete"/>
                                         <button class="btn btn-danger">Eliminar</button>
                                     </form>
+
+
                                 </td>
                             </tr>
                             </tbody>

@@ -83,6 +83,14 @@ public class UsuarioService {
                 });
 
     }
+
+    public void softDeleteUsuario (int id) {
+        usuarioRepository.findById(id).
+                ifPresent(usuarioObtenido -> {
+                    usuarioObtenido.setActivo(false);
+                    usuarioRepository.save(usuarioObtenido);
+                });
+    }
 /*
     public void actualizarPersonaPorId(int id, Persona persona) {
         personaRepositorio.findById(id).

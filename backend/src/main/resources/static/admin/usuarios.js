@@ -48,3 +48,11 @@ function handleFormSubmit(event) {
             showNotification('Error: ' + error.message, 'error');
         });
 }
+
+function confirmDelete(form) {
+    const id = form.getAttribute('data-id');
+    const nombre = form.getAttribute('data-nombre');
+    const apellido = form.getAttribute('data-apellido');
+
+    return confirm(`¿Estás seguro de que deseas eliminar al usuario con ID ${id}, nombre ${nombre} ${apellido}?`);
+}

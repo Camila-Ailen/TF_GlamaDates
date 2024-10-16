@@ -104,6 +104,19 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
+    @DeleteMapping("/{id}")
+    public String eliminarUsuario(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+        usuarioService.softDeleteUsuario(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario eliminado exitosamente.");
+            return "redirect:/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
+        } catch (Exception e) {
+            // Agregar mensaje de error
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el usuario.");
+            return "redirect:/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
+        }
+    }
+
 /*
 @PostMapping("/usuarios")
     public Usuario postUsuario(@Valid @ModelAttribute Usuario usuario) {
