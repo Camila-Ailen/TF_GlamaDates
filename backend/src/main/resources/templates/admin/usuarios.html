@@ -907,9 +907,19 @@
                                     </form>
                                 </td>
                                 <td>
+
+
                                     <form th:action="@{/usuarios/{id}(id=${usuario.id})}" th:method="post" th:data-id="${usuario.id}" th:data-nombre="${usuario.nombre}" th:data-apellido="${usuario.apellido}" onsubmit="return confirmDelete(this)">
                                         <input type="hidden" name="_method" value="delete"/>
-                                        <button class="btn btn-danger">Eliminar</button>
+                                        <div th:if="${usuario.activo} == true">
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </div>
+                                    </form>
+                                    <form th:action="@{/usuarios/{id}/activar(id=${usuario.id})}" th:method="post" th:data-id="${usuario.id}" th:data-nombre="${usuario.nombre}" th:data-apellido="${usuario.apellido}" onsubmit="return confirmDelete(this)">
+                                        <input type="hidden" name="_method" value="put"/>
+                                        <div th:if="${usuario.activo} == false">
+                                            <button class="btn btn-success">Activar</button>
+                                        </div>
                                     </form>
 
 

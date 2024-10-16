@@ -91,6 +91,14 @@ public class UsuarioService {
                     usuarioRepository.save(usuarioObtenido);
                 });
     }
+
+    public void activarUsuario (int id) {
+        usuarioRepository.findById(id).
+                ifPresent(usuarioObtenido -> {
+                    usuarioObtenido.setActivo(true);
+                    usuarioRepository.save(usuarioObtenido);
+                });
+    }
 /*
     public void actualizarPersonaPorId(int id, Persona persona) {
         personaRepositorio.findById(id).

@@ -117,6 +117,19 @@ public class UsuarioController {
         }
     }
 
+    @PutMapping("/{id}/activar")
+    public String activarUsuario(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            usuarioService.activarUsuario(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario activado exitosamente.");
+            return "redirect:/usuarios";  // Redirigir a la lista de usuarios
+        } catch (Exception e) {
+            // Agregar mensaje de error
+            redirectAttributes.addFlashAttribute("error", "Error al activar el usuario.");
+            return "redirect:/usuarios";  // Redirigir a la lista de usuarios
+        }
+    }
+
 /*
 @PostMapping("/usuarios")
     public Usuario postUsuario(@Valid @ModelAttribute Usuario usuario) {
