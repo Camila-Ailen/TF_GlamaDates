@@ -17,6 +17,10 @@
 </head>
 <body>
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
+    <!-- Mensaje de éxito -->
+    <div th:if="${mensaje}" th:text="${mensaje}" id="flash-message" class="hidden"></div>
+
+
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
         <div class="flex flex-wrap justify-between items-center">
             <div class="flex justify-start items-center">
@@ -945,6 +949,14 @@
             </div>
         </section>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage && flashMessage.textContent.trim() !== '') {
+                showNotification(flashMessage.textContent);
+            }
+        });
+    </script>
 </div>
 </body>
 </html>

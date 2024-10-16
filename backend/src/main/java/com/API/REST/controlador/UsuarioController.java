@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -91,7 +92,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado) {
+    public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado, RedirectAttributes redirectAttributes) {
         System.out.println("Entre al controlador de usuario");
         if (resultado.hasErrors()) {
             System.out.println("Hay errores");
@@ -99,6 +100,7 @@ public class UsuarioController {
         }
         System.out.println("voy a llamar al servicio");
         usuarioService.updateUsuario(id, usuario);
+        redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado exitosamente");
         return "redirect:/usuarios";
     }
 
