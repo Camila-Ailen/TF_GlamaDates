@@ -855,34 +855,48 @@
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <script>
-                            console.log('Estoy en la vista de usuarios antes de crear la tabla');
-                        </script>
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <table id="userTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-4 py-3">ID</th>
-                                <th scope="col" class="px-4 py-3">Apellido y Nombre</th>
-                                <th scope="col" class="px-4 py-3">Email</th>
-                                <th scope="col" class="px-4 py-3">Telefono</th>
-                                <th scope="col" class="px-4 py-3">Sexo</th>
-                                <th scope="col" class="px-4 py-3">Fecha de Nacimiento</th>
-                                <th scope="col" class="px-4 py-3">Rol</th>
-                                <th scope="col" class="px-4 py-3">Activo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='id', sortDir=${reverseSortDir})}">ID</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='apellido', sortDir=${reverseSortDir})}">APELLIDO Y NOMBRE</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='correo', sortDir=${reverseSortDir})}">EMAIL</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='telefono', sortDir=${reverseSortDir})}">TELEFONO</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='sexo', sortDir=${reverseSortDir})}">SEXO</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='fechaNacimiento', sortDir=${reverseSortDir})}">FECHA DE NACIMIENTO</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='unRol', sortDir=${reverseSortDir})}">ROL</a>
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <a th:href="@{/usuarios(sortField='activo', sortDir=${reverseSortDir})}">ESTADO</a>
+                                </th>
+
                                 <th scope="col" class="px-4 py-3"></th>
                                 <th scope="col" class="px-4 py-3"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <script>
-                                console.log('Estoy en la vista de usuarios antes del for');
-                                console.log('Usuarios: [[${usuario}]]');
-                            </script>
                             <tr th:each="usuario : ${usuarios}"
                                 th:classappend="${usuario.activo} ? '' : 'bg-red-100 text-red-600'">
-                                <script th:inline="javascript">
-                                    console.log('Usuario desde el for: [[${usuario}]]'); // Log para verificar cada usuario
-                                </script>
 
                                 <td th:text="${usuario.id}">ID</td>
                                 <td th:text="|${usuario.apellido} ${usuario.nombre}|">Apellido y Nombre</td>

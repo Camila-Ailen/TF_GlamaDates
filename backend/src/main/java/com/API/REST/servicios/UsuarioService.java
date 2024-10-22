@@ -6,6 +6,7 @@ import com.API.REST.modelo.Usuario;
 import com.API.REST.repositorio.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,11 @@ public class UsuarioService {
         var usuarios = this.usuarioRepository.findAll();
         System.out.println("Estos son los usuarios desde el servicio: " + usuarios);
         return usuarios;
+    }
+
+    public List<Usuario> findAllUsuariosSorted(String sortField, String sortDir) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
+        return usuarioRepository.findAll(sort);
     }
 
 

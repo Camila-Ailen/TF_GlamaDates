@@ -40,13 +40,18 @@ public class UsuarioController {
 
 // Este ya es como el de Biale
     @GetMapping()
-    public String index (Model modelo){
-        var usuarios = usuarioService.findAllUsuarios();
+    public String index (@RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
+                         @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortDir,
+                         Model modelo){
+        var usuarios = usuarioService.findAllUsuariosSorted(sortField, sortDir);
         var roles = rolService.findAllRoles();
         var sexos = Sexo.values();
         modelo.addAttribute("usuarios", usuarios);
         modelo.addAttribute("roles", roles);
         modelo.addAttribute("sexos", sexos);
+        modelo.addAttribute("sortField", sortField);
+        modelo.addAttribute("sortDir", sortDir);
+        modelo.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "admin/usuarios";
     }
 
