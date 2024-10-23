@@ -42,8 +42,11 @@ public class UsuarioController {
     @GetMapping()
     public String index (@RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
                          @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortDir,
+                         @RequestParam(name = "activo", required = false) Boolean activo,
+                         @RequestParam(name = "rol", required = false) String rol,
+                         @RequestParam(name = "sexo", required = false) Sexo sexo,
                          Model modelo){
-        var usuarios = usuarioService.findAllUsuariosSorted(sortField, sortDir);
+        var usuarios = usuarioService.findAllUsuariosFiltered(sortField, sortDir, activo, rol, sexo);
         var roles = rolService.findAllRoles();
         var sexos = Sexo.values();
         modelo.addAttribute("usuarios", usuarios);
@@ -52,6 +55,10 @@ public class UsuarioController {
         modelo.addAttribute("sortField", sortField);
         modelo.addAttribute("sortDir", sortDir);
         modelo.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        modelo.addAttribute("activo", activo);
+        modelo.addAttribute("rol", rol);
+        modelo.addAttribute("sexo", sexo);
+        modelo.addAttribute("totalUsuarios", usuarios.size());
         return "admin/usuarios";
     }
 

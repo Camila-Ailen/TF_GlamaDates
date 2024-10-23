@@ -2,15 +2,16 @@ package com.API.REST.servicios;
 
 import com.API.REST.exception.ResourceAlreadyExistsException;
 import com.API.REST.exception.ResourceNotFoundException;
+import com.API.REST.modelo.Sexo;
 import com.API.REST.modelo.Usuario;
 import com.API.REST.repositorio.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,24 @@ public class UsuarioService {
     public List<Usuario> findAllUsuariosSorted(String sortField, String sortDir) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
         return usuarioRepository.findAll(sort);
+    }
+
+    public List<Usuario> findAllUsuariosFiltered(String sortField, String sortDir, Boolean activo, String rol, Sexo sexo) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
+        Specification<Usuario> spect = (root, query, criteriaBuilder) -> {
+            var predicates = criteriaBuilder.conjunction();
+            if (activo != null) {
+                predicates.getExpressions().add(criteriaBuilder.equal(root.get("activo"), activo));
+            }
+            if (rol != null && !rol.isEmpty()) {
+                predicates.getExpressions().add(criteriaBuilder.equal(root.get("unRol").get("nombre"), rol));
+            }
+            if (sexo != null) {
+                predicates.getExpressions().add(criteriaBuilder.equal(root.get("sexo"), sexo));
+            }
+            return predicates;
+        };
+        return usuarioRepository.findAll(spect, sort);
     }
 
 
