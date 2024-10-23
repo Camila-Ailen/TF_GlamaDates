@@ -1,0 +1,19 @@
+/* Asegúrate de que el combobox se muestre por encima de la tabla */
+#filterDropdown {
+    position: absolute;
+    z-index: 1000; /* Asegúrate de que el valor sea mayor que el de la tabla */
+    background-color: white; /* Asegúrate de que el fondo sea blanco */
+    border: 1px solid #ccc; /* Añade un borde para mejor visibilidad */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra para mejor visibilidad */
+}
+
+/* src/main/resources/static/css/detalles.css */
+.fixed-container {
+    height: 80vh; /* Ajusta la altura según sea necesario */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 20px; /* Ajusta el padding según sea necesario */
+    box-sizing: border-box;
+}

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,24 +36,67 @@ public class UsuarioService {
         return usuarioRepository.findAll(sort);
     }
 
-    public List<Usuario> findAllUsuariosFiltered(String sortField, String sortDir, Boolean activo, String rol, Sexo sexo) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortField);
-        Specification<Usuario> spect = (root, query, criteriaBuilder) -> {
-            var predicates = criteriaBuilder.conjunction();
-            if (activo != null) {
-                predicates.getExpressions().add(criteriaBuilder.equal(root.get("activo"), activo));
-            }
-            if (rol != null && !rol.isEmpty()) {
-                predicates.getExpressions().add(criteriaBuilder.equal(root.get("unRol").get("nombre"), rol));
-            }
-            if (sexo != null) {
-                predicates.getExpressions().add(criteriaBuilder.equal(root.get("sexo"), sexo));
-            }
-            return predicates;
-        };
-        return usuarioRepository.findAll(spect, sort);
+    public List<Usuario> findAllUsuariosFiltered(Boolean activo, String rol, Sexo sexo) {
+        List<Usuario> usuariosFiltrados = usuarioRepository.findAll();
+
+        if (activo != null) {
+            usuariosFiltrados = usuariosFiltrados.stream()
+                    .filter(usuario -> usuario.isActivo() == activo)
+                    .collect(Collectors.toList());
+        }
+
+        if (rol != null && !rol.isEmpty()) {
+            usuariosFiltrados = usuariosFiltrados.stream()
+                    .filter(usuario -> usuario.getUnRol().getNombre().equals(rol))
+                    .collect(Collectors.toList());
+        }
+
+        if (sexo != null) {
+            usuariosFiltrados = usuariosFiltrados.stream()
+                    .filter(usuario -> usuario.getSexo() == sexo)
+                    .collect(Collectors.toList());
+        }
+
+        return usuariosFiltrados;
     }
 
+    public List<Usuario> sortUsuarios(List<Usuario> usuarios, String sortField, String sortDir) {
+        return usuarios.stream()
+                .sorted((u1, u2) -> {
+                    int result = 0;
+                    switch (sortField) {
+                        case "id":
+                            result = Integer.compare(u1.getId(), u2.getId());
+                            break;
+                        case "nombre":
+                            result = u1.getNombre().compareTo(u2.getNombre());
+                            break;
+                        case "apellido":
+                            result = u1.getApellido().compareTo(u2.getApellido());
+                            break;
+                        case "correo":
+                            result = u1.getCorreo().compareTo(u2.getCorreo());
+                            break;
+                        case "telefono":
+                            result = u1.getTelefono().compareTo(u2.getTelefono());
+                            break;
+                        case "fechaNacimiento":
+                            result = u1.getFechaNacimiento().compareTo(u2.getFechaNacimiento());
+                            break;
+                        case "activo":
+                            result = Boolean.compare(u1.isActivo(), u2.isActivo());
+                            break;
+                        case "sexo":
+                            result = u1.getSexo().compareTo(u2.getSexo());
+                            break;
+                        case "rol":
+                            result = u1.getUnRol().getNombre().compareTo(u2.getUnRol().getNombre());
+                            break;
+                    }
+                    return sortDir.equals("asc") ? result : -result;
+                })
+                .collect(Collectors.toList());
+    }
 
     public List<Usuario> findAllUsuariosActivos() {
         return usuarioRepository.findByActivo(true);

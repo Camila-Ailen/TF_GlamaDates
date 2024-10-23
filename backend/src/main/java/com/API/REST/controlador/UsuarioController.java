@@ -39,27 +39,36 @@ public class UsuarioController {
  */
 
 // Este ya es como el de Biale
-    @GetMapping()
-    public String index (@RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
-                         @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortDir,
-                         @RequestParam(name = "activo", required = false) Boolean activo,
-                         @RequestParam(name = "rol", required = false) String rol,
-                         @RequestParam(name = "sexo", required = false) Sexo sexo,
-                         Model modelo){
-        var usuarios = usuarioService.findAllUsuariosFiltered(sortField, sortDir, activo, rol, sexo);
-        var roles = rolService.findAllRoles();
-        var sexos = Sexo.values();
-        modelo.addAttribute("usuarios", usuarios);
-        modelo.addAttribute("roles", roles);
-        modelo.addAttribute("sexos", sexos);
-        modelo.addAttribute("sortField", sortField);
-        modelo.addAttribute("sortDir", sortDir);
-        modelo.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        modelo.addAttribute("activo", activo);
-        modelo.addAttribute("rol", rol);
-        modelo.addAttribute("sexo", sexo);
-        modelo.addAttribute("totalUsuarios", usuarios.size());
-        return "admin/usuarios";
+@GetMapping()
+public String index(@RequestParam(name = "sortField", defaultValue = "id") String sortField,
+                    @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
+                    @RequestParam(name = "activo", required = false) Boolean activo,
+                    @RequestParam(name = "rol", required = false) String rol,
+                    @RequestParam(name = "sexo", required = false) Sexo sexo,
+                    Model modelo) {
+    // Filtrar los usuarios
+    List<Usuario> usuarios = filterUsuarios(activo, rol, sexo);
+    // Ordenar la lista filtrada
+    usuarios = usuarioService.sortUsuarios(usuarios, sortField, sortDir);
+
+    var roles = rolService.findAllRoles();
+    var sexos = Sexo.values();
+
+    modelo.addAttribute("usuarios", usuarios);
+    modelo.addAttribute("roles", roles);
+    modelo.addAttribute("sexos", sexos);
+    modelo.addAttribute("sortField", sortField);
+    modelo.addAttribute("sortDir", sortDir);
+    modelo.addAttribute("reverseSortDir", sortDir.equals("desc") ? "asc" : "desc");
+    modelo.addAttribute("activo", activo);
+    modelo.addAttribute("rol", rol);
+    modelo.addAttribute("sexo", sexo);
+    modelo.addAttribute("totalUsuarios", usuarios.size());
+    return "admin/usuarios";
+}
+
+    private List<Usuario> filterUsuarios(Boolean activo, String rol, Sexo sexo) {
+        return usuarioService.findAllUsuariosFiltered(activo, rol, sexo);
     }
 
     @GetMapping("/usuarios/crear")
