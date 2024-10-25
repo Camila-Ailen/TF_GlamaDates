@@ -1,6 +1,3 @@
-
-
-
 function showNotification(message, type = 'success') {
     const messageContainer = document.createElement('div');
     messageContainer.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
@@ -56,3 +53,25 @@ function confirmDelete(form) {
 
     return confirm(`¿Estás seguro de que deseas eliminar al usuario con ID ${id}, nombre ${nombre} ${apellido}?`);
 }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('simple-search');
+    const table = document.getElementById('userTable');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('input', function() {
+    const filter = searchInput.value.toLowerCase();
+    for (let i = 1; i < rows.length; i++) { // Empieza en 1 para saltar el encabezado
+    const cells = rows[i].getElementsByTagName('td');
+    let match = false;
+    for (let j = 0; j < cells.length; j++) {
+    if (cells[j].innerText.toLowerCase().includes(filter)) {
+    match = true;
+    break;
+}
+}
+    rows[i].style.display = match ? '' : 'none';
+}
+});
+});
