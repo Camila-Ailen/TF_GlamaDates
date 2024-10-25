@@ -842,14 +842,14 @@
                                                 <label for="rol" class="block text-sm font-medium text-gray-900 dark:text-white">Rol</label>
                                                 <select id="rol" name="rol" class="block w-full mt-1">
                                                     <option value="" th:text="'No aplicar filtro'" th:selected="${rol == null or rol.isEmpty()}"></option>
-                                                    <option th:each="rolItem : ${roles}" th:value="${rolItem.nombre}" th:text="${rolItem.nombre}" th:selected="rolItem.nombre == rol"></option>
+                                                    <option th:each="rolItem : ${roles}" th:value="${rolItem.nombre}" th:text="${rolItem.nombre}" th:selected="${rolItem.nombre == rol}"></option>
                                                 </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="sexo" class="block text-sm font-medium text-gray-900 dark:text-white">Sexo</label>
                                                 <select id="sexo" name="sexo" class="block w-full mt-1">
                                                     <option value="" th:text="'No aplicar filtro'" th:selected="${sexo == null or sexo.name().isEmpty()}"></option>
-                                                    <option th:each="sexoItem : ${sexos}" th:value="${sexoItem}" th:text="${sexoItem}" th:selected="${sexoItem.name() == sexo}"></option>
+                                                    <option th:each="sexoItem : ${sexos}" th:value="${sexoItem}" th:text="${sexoItem}" th:selected="${sexoItem.name() == sexo?.name()}"></option>
                                                 </select>
                                             </div>
                                             <button type="submit" class="w-full bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Aplicar filtros</button>
