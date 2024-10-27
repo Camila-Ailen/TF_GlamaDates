@@ -7,6 +7,9 @@ import com.API.REST.modelo.Usuario;
 import com.API.REST.repositorio.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -111,6 +114,12 @@ public class UsuarioService {
         return listado;
 
          */
+    }
+
+    public Page<Usuario> getPaginatedUsuarios(List<Usuario> usuarios, PageRequest pageRequest) {
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), usuarios.size());
+        return new PageImpl<>(usuarios.subList(start, end), pageRequest, usuarios.size());
     }
 
 

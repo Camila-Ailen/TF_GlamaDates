@@ -7,6 +7,8 @@ import com.API.REST.servicios.RolService;
 import com.API.REST.servicios.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,16 +47,26 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
                     @RequestParam(name = "activo", required = false) Boolean activo,
                     @RequestParam(name = "rol", required = false) String rol,
                     @RequestParam(name = "sexo", required = false) Sexo sexo,
+                    @RequestParam(name = "page", defaultValue = "0") int page,
+                    @RequestParam(name = "size", defaultValue = "20") int size,
                     Model modelo) {
     // Filtrar los usuarios
-    List<Usuario> usuarios = filterUsuarios(activo, rol, sexo);
+    List<Usuario> usuariosFiltrados = filterUsuarios(activo, rol, sexo);
     // Ordenar la lista filtrada
-    usuarios = usuarioService.sortUsuarios(usuarios, sortField, sortDir);
+    usuariosFiltrados = usuarioService.sortUsuarios(usuariosFiltrados, sortField, sortDir);
+
+    // Obtener la página de usuarios filtrados y ordenados
+    Page<Usuario> usuarioPage = usuarioService.getPaginatedUsuarios(usuariosFiltrados, PageRequest.of(page, size));
 
     var roles = rolService.findAllRoles();
     var sexos = Sexo.values();
 
-    modelo.addAttribute("usuarios", usuarios);
+
+    modelo.addAttribute("usuarioPage", usuarioPage);
+    modelo.addAttribute("currentPage", page);
+    modelo.addAttribute("totalPages", usuarioPage.getTotalPages());
+
+    modelo.addAttribute("usuarios", usuarioPage.getContent());
     modelo.addAttribute("roles", roles);
     modelo.addAttribute("sexos", sexos);
     modelo.addAttribute("sortField", sortField);
@@ -63,7 +75,7 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     modelo.addAttribute("activo", activo);
     modelo.addAttribute("rol", rol);
     modelo.addAttribute("sexo", sexo);
-    modelo.addAttribute("totalUsuarios", usuarios.size());
+    modelo.addAttribute("totalUsuarios", usuariosFiltrados.size());
     return "admin/usuarios";
 }
 
