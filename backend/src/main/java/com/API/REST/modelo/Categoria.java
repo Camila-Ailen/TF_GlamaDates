@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -40,6 +41,11 @@ public class Categoria {
     @ManyToOne
     @JoinColumn(name = "fk_categoria_padre", nullable = true)
     private Categoria categoriaPadre;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "categoriaPadre")
+    private Set<Categoria> subcategorias = new HashSet<>();
+
+
 
     //muchas categorias tiene muchas estaciones
     @ManyToMany
