@@ -89,7 +89,9 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     public String nuevoUsuario(Model modelo) {
         var usuario = new Usuario();
         modelo.addAttribute("modal", true);
-        return "/usuarios";
+
+        modelo.addAttribute("contenido", "admin/usuarios");
+        return "admin/principal";
     }
 
 
@@ -123,20 +125,23 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
         modelo.addAttribute("usuario", usuario);
         modelo.addAttribute("roles", roles);
         modelo.addAttribute("sexos", sexos);
-        return "admin/usuarioModificar";
+
+        modelo.addAttribute("contenido", "admin/usuarioModificar");
+        return "admin/principal";
     }
 
     @PutMapping("/{id}")
-    public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado, RedirectAttributes redirectAttributes) {
+    public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado, RedirectAttributes redirectAttributes, Model modelo) {
         System.out.println("Entre al controlador de usuario");
         if (resultado.hasErrors()) {
             System.out.println("Hay errores");
-            return "admin/usuarioModificar";
+            modelo.addAttribute("contenido", "admin/usuarioModificar");
+            return "admin/principal";
         }
         System.out.println("voy a llamar al servicio");
         usuarioService.updateUsuario(id, usuario);
         redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado exitosamente");
-        return "redirect:/usuarios";
+        return "redirect:/admin/usuarios";
     }
 
     @DeleteMapping("/{id}")
@@ -144,11 +149,11 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
         try {
         usuarioService.softDeleteUsuario(id);
             redirectAttributes.addFlashAttribute("mensaje", "Usuario eliminado exitosamente.");
-            return "redirect:/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
+            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
         } catch (Exception e) {
             // Agregar mensaje de error
             redirectAttributes.addFlashAttribute("error", "Error al eliminar el usuario.");
-            return "redirect:/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
+            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
         }
     }
 
@@ -157,11 +162,11 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
         try {
             usuarioService.activarUsuario(id);
             redirectAttributes.addFlashAttribute("mensaje", "Usuario activado exitosamente.");
-            return "redirect:/usuarios";  // Redirigir a la lista de usuarios
+            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios
         } catch (Exception e) {
             // Agregar mensaje de error
             redirectAttributes.addFlashAttribute("error", "Error al activar el usuario.");
-            return "redirect:/usuarios";  // Redirigir a la lista de usuarios
+            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios
         }
     }
 

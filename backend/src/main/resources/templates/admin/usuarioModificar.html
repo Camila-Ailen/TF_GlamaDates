@@ -17,13 +17,18 @@
 </head>
 <body>
 
+<div class="p-4 md:ml-64 h-auto pt-20">
+    <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Editar Usuario
+        </h3>
+    </div>
 
-<h1>Editar usuario</h1>
     <script>
         console.log('Estoy en la vista de usuarios antes de abrir el modal');
     </script>
             <!--  body -->
-            <form th:action="@{/usuarios/{id}(id=${usuario.id})}" th:object="${usuario}" th:method="post">
+            <form th:action="@{/admin/usuarios/{id}(id=${usuario.id})}" th:object="${usuario}" th:method="post">
                 <input type="hidden" name="_method" value="put"/>
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
@@ -56,7 +61,7 @@
                     </div>
                     <div>
                         <label for="rol" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                        <select id="rol" name="unRol" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <select id="rol" name="unRol" th:field="*{unRol}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}" th:selected="${rol.id} == ${usuario.unRol.id}"></option>
                         </select>
                     </div>
@@ -65,13 +70,12 @@
                     <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     Actualizar usuario
                 </button>
-                <a href="/usuarios" class="inline-flex items-center bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-500 dark:focus:ring-gray-600 ml-2">
+                <a href="/admin/usuarios" class="inline-flex items-center bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-400 dark:hover:bg-gray-500 dark:focus:ring-gray-600 ml-2">
                     Cancelar
                 </a>
             </form>
-
-
     </div>
+</div>
 
 </body>
 </html>

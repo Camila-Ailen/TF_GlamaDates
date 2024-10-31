@@ -150,6 +150,7 @@ public class UsuarioService {
                     usuarioObtenido.setTelefono(usuarioDetails.getTelefono());
                     usuarioObtenido.setActivo(usuarioDetails.isActivo());
                     usuarioObtenido.setSexo(usuarioDetails.getSexo());
+                    usuarioObtenido.setUnRol(usuarioDetails.getUnRol());
                     if (!(usuarioObtenido.getCorreo().equals(usuarioDetails.getCorreo()))){
                         if (usuarioRepository.existsByCorreo(usuarioDetails.getCorreo())) {
                             throw new ResourceNotFoundException("Usuario", "correo", usuarioDetails.getCorreo());
