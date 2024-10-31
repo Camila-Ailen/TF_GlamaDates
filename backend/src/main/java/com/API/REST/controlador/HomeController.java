@@ -9,18 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class HomeController {
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("message", "¡Hola, Thymeleaf!");
-        return "Private home";
+        return "home";
     }
 
     @GetMapping("/admin")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String admin() {
-        return "Admin home";
+        return "admin/principal";
     }
 }

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/usuarios")
+@RequestMapping("admin/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
     @Autowired
@@ -76,7 +76,9 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     modelo.addAttribute("rol", rol);
     modelo.addAttribute("sexo", sexo);
     modelo.addAttribute("totalUsuarios", usuariosFiltrados.size());
-    return "admin/usuarios";
+
+    modelo.addAttribute("contenido", "admin/usuarios");
+    return "admin/principal";
 }
 
     private List<Usuario> filterUsuarios(Boolean activo, String rol, Sexo sexo) {
