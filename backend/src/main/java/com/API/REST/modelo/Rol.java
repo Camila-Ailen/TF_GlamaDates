@@ -29,6 +29,14 @@ public class Rol {
     @Column(name = "descripcion_rol", length = 100, nullable = false)
     private String descripcion;
 
+    //TRIGGERS
+    @PrePersist
+    @PreUpdate
+    public void convertirAMayusculas() {
+        this.nombre = this.nombre.toUpperCase();
+        this.descripcion = this.descripcion.toUpperCase();
+    }
+
     //RELACIONES
     //Un rol tiene muchos usuarios
     @OneToMany(mappedBy = "unRol")

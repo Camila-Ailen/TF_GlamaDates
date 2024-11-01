@@ -28,6 +28,14 @@ public class Categoria {
     private String observaciones;
 
 
+    //TRIGGERS
+    @PrePersist
+    @PreUpdate
+    public void convertirAMayusculas() {
+        this.nombre = this.nombre.toUpperCase();
+        this.observaciones = this.observaciones.toUpperCase();
+    }
+
     //RELACIONES
     //una categoria tiene muchos productos
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "unaCategoria")
