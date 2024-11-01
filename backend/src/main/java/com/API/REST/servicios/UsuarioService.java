@@ -141,7 +141,6 @@ public class UsuarioService {
 
 
     public void updateUsuario(int usuarioId, Usuario usuarioDetails) {
-        System.out.println("Entre al servicio");
         usuarioRepository.findById(usuarioId)
                 .ifPresent(usuarioObtenido -> {
                     usuarioObtenido.setNombre(usuarioDetails.getNombre());

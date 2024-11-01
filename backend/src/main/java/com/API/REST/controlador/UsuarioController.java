@@ -27,20 +27,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     @Autowired
     private final RolService rolService;
-/*
-    @GetMapping("/todoUsuarios")
-    public List<Usuario> getAllUsuarios() {
-        return usuarioService.findAllUsuarios();
-    }
 
-    @GetMapping("/usuarios")
-    public List<Usuario> getAllUsuariosActivos() {
-        return usuarioService.findAllUsuariosActivos();
-    }
-
- */
-
-// Este ya es como el de Biale
 @GetMapping()
 public String index(@RequestParam(name = "sortField", defaultValue = "id") String sortField,
                     @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
@@ -94,18 +81,6 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
         return "admin/principal";
     }
 
-
-
-/*
-
-
-    @GetMapping("/usuarios/{id}")
-    public Usuario getUsuarioById(@PathVariable(value = "id") Integer usuarioId) {
-        return usuarioService.findUsuarioById(usuarioId);
-    }
-
- */
-
     @PostMapping()
     public String postUsuario(@Valid @ModelAttribute Usuario usuario) {
         if (usuario.getClave() == null || usuario.getClave().isEmpty()) {
@@ -132,13 +107,11 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
 
     @PutMapping("/{id}")
     public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado, RedirectAttributes redirectAttributes, Model modelo) {
-        System.out.println("Entre al controlador de usuario");
         if (resultado.hasErrors()) {
             System.out.println("Hay errores");
             modelo.addAttribute("contenido", "admin/usuarioModificar");
             return "admin/principal";
         }
-        System.out.println("voy a llamar al servicio");
         usuarioService.updateUsuario(id, usuario);
         redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado exitosamente");
         return "redirect:/admin/usuarios";

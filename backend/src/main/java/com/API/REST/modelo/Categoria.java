@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Categoria {
+public class Categoria implements CategoriaComponent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_categoria", nullable = false, unique = true)
@@ -26,6 +26,10 @@ public class Categoria {
     @Basic
     @Column(name = "observaciones_categoria", length = 100, nullable = true)
     private String observaciones;
+
+    @Basic
+    @Column(name = "activo_categoria", nullable = false)
+    private boolean activo;
 
 
     //TRIGGERS
@@ -64,4 +68,31 @@ public class Categoria {
     )
     private Set<Estacion> listaEstaciones;
 
+
+    // Implementación de los métodos de CategoriaComponent
+
+    @Override
+    public Set<Categoria> getSubcategorias() {
+        return subcategorias;
+    }
+
+    @Override
+    public void agregarSubcategoria(Categoria subcategoria) {
+        subcategorias.add(subcategoria);
+        subcategoria.setCategoriaPadre(this);
+    }
+
+    @Override
+    public void eliminarSubcategoria(Categoria subcategoria) {
+        subcategorias.remove(subcategoria);
+        subcategoria.setCategoriaPadre(null);
+    }
+
+    @Override
+    public void mostrarCategorias(int nivel) {
+        System.out.println("  ".repeat(nivel) + "- " + nombre);
+        for (CategoriaComponent subcategoria : subcategorias) {
+            subcategoria.mostrarCategorias(nivel + 1);
+        }
+    }
 }
