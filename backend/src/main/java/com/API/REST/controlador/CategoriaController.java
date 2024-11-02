@@ -22,7 +22,7 @@ public class CategoriaController {
 
     @GetMapping
     public String listarCategorias(@RequestParam(name = "page", defaultValue = "0") int page,
-                                   @RequestParam(name = "size", defaultValue = "3") int size,
+                                   @RequestParam(name = "size", defaultValue = "10") int size,
                                    @RequestParam(name = "sortField", defaultValue = "id") String sortField,
                                    @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
                                    @RequestParam(name = "activo", required = false) Boolean activo,
@@ -32,6 +32,7 @@ public class CategoriaController {
         List<Categoria> categorias = categoriaService.findAll();
 
         // Ordena la lista de categorias
+        System.out.println("desde controlador voy a ir a ordenar");
         categorias = categoriaService.sortCategorias(categorias, sortField, sortDir);
 
         // Obtiene la página de categorias filtradas y ordenadas
@@ -91,11 +92,11 @@ public class CategoriaController {
         try {
             categoriaService.softDeleteCategoria(id);
             redirectAttributes.addFlashAttribute("mensaje", "Categoria eliminada exitosamente.");
-            return "redirect:/admin/categorias/lista";  // Redirigir a la lista de usuarios (o la página que quieras)
+            return "redirect:/admin/categorias";
         } catch (Exception e) {
             // Agregar mensaje de error
             redirectAttributes.addFlashAttribute("error", "Error al eliminar la categoria.");
-            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios (o la página que quieras)
+            return "redirect:/admin/categorias";
         }
     }
 
@@ -104,11 +105,11 @@ public class CategoriaController {
         try {
             categoriaService.activarCategoria(id);
             redirectAttributes.addFlashAttribute("mensaje", "Usuario activado exitosamente.");
-            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios
+            return "redirect:/admin/categorias";
         } catch (Exception e) {
             // Agregar mensaje de error
             redirectAttributes.addFlashAttribute("error", "Error al activar el usuario.");
-            return "redirect:/admin/usuarios";  // Redirigir a la lista de usuarios
+            return "redirect:/admin/categorias";
         }
     }
 

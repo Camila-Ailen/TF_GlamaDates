@@ -72,11 +72,11 @@
                                 </th>
 
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <a th:href="@{/admin/categorias(sortField='categoriaPadre', sortDir=${reverseSortDir})}">PADRE</a>
+                                    <a th:href="@{/admin/categorias(sortField='categoriaPadre.nombre', sortDir=${reverseSortDir})}">PADRE</a> <!-- esto debes cambiar -->
                                 </th>
 
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <a th:href="@{/admin/categorias/lista(sortField='activo', sortDir=${reverseSortDir})}">ESTADO</a>
+                                    <a th:href="@{/admin/categorias(sortField='activo', sortDir=${reverseSortDir})}">ESTADO</a>
                                 </th>
 
                                 <th scope="col" class="px-4 py-3"></th>
@@ -145,13 +145,13 @@
                     <!-- Esquema de categorías y subcategorías -->
                     <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg mt-4 p-4">
                         <h2 class="text-lg font-medium text-gray-900 dark:text-white">Esquema de Categorías</h2>
-                        <ul>
+                        <ul class="list-disc pl-5">
                             <li th:each="categoria : ${categorias}" th:if="${categoria.categoriaPadre == null}">
                                 <span th:text="${categoria.nombre}"></span>
-                                <ul th:if="${categoria.subcategorias}">
+                                <ul class="list-disc pl-5" th:if="${categoria.subcategorias != null}">
                                     <li th:each="subcategoria : ${categoria.subcategorias}">
                                         <span th:text="${subcategoria.nombre}"></span>
-                                        <ul th:if="${subcategoria.subcategorias}">
+                                        <ul class="list-disc pl-5" th:if="${subcategoria.subcategorias != null}">
                                             <li th:each="subsubcategoria : ${subcategoria.subcategorias}">
                                                 <span th:text="${subsubcategoria.nombre}"></span>
                                                 <!-- Puedes seguir anidando más niveles si es necesario -->

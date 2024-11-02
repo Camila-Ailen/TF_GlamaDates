@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CategoriaService {
         return categoriaRepository.findAll();
     }
 
+
     public List<Categoria> sortCategorias(List<Categoria> categorias, String sortField, String sortDir) {
         categorias.sort((c1, c2) -> {
             if (sortDir.equals("asc")) {
@@ -34,6 +36,16 @@ public class CategoriaService {
                         return c1.getObservaciones().compareTo(c2.getObservaciones());
                     case "activo":
                         return Boolean.compare(c1.isActivo(), c2.isActivo());
+                    case "categoriaPadre.nombre":
+                        if (c1.getCategoriaPadre() == null && c2.getCategoriaPadre() == null) {
+                            return 0;
+                        } else if (c1.getCategoriaPadre() == null) {
+                            return -1;
+                        } else if (c2.getCategoriaPadre() == null) {
+                            return 1;
+                        } else {
+                            return c1.getCategoriaPadre().getNombre().compareTo(c2.getCategoriaPadre().getNombre());
+                        }
                     default:
                         return 0;
                 }
@@ -47,6 +59,16 @@ public class CategoriaService {
                         return c2.getObservaciones().compareTo(c1.getObservaciones());
                     case "activo":
                         return Boolean.compare(c2.isActivo(), c1.isActivo());
+                    case "categoriaPadre.nombre":
+                        if (c1.getCategoriaPadre() == null && c2.getCategoriaPadre() == null) {
+                            return 0;
+                        } else if (c1.getCategoriaPadre() == null) {
+                            return -1;
+                        } else if (c2.getCategoriaPadre() == null) {
+                            return 1;
+                        } else {
+                            return c2.getCategoriaPadre().getNombre().compareTo(c1.getCategoriaPadre().getNombre());
+                        }
                     default:
                         return 0;
                 }
@@ -54,6 +76,8 @@ public class CategoriaService {
         });
         return categorias;
     }
+
+
 
     public Page<Categoria> getPaginatedCategorias(List<Categoria> categorias, PageRequest pageRequest) {
         int pageSize = pageRequest.getPageSize();
