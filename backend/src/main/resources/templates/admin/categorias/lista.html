@@ -146,15 +146,14 @@
                     <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg mt-4 p-4">
                         <h2 class="text-lg font-medium text-gray-900 dark:text-white">Esquema de Categorías</h2>
                         <ul class="list-disc pl-5">
-                            <li th:each="categoria : ${categorias}" th:if="${categoria.categoriaPadre == null}">
+                            <li th:each="categoria : ${categorias}" th:if="${categoria.categoriaPadre == null and categoria.activo}">
                                 <span th:text="${categoria.nombre}"></span>
                                 <ul class="list-disc pl-5" th:if="${categoria.subcategorias != null}">
-                                    <li th:each="subcategoria : ${categoria.subcategorias}">
+                                    <li th:each="subcategoria : ${categoria.subcategorias}" th:if="${subcategoria.activo}">
                                         <span th:text="${subcategoria.nombre}"></span>
                                         <ul class="list-disc pl-5" th:if="${subcategoria.subcategorias != null}">
-                                            <li th:each="subsubcategoria : ${subcategoria.subcategorias}">
+                                            <li th:each="subsubcategoria : ${subcategoria.subcategorias}" th:if="${subsubcategoria.activo and subsubcategoria.esHoja()}">
                                                 <span th:text="${subsubcategoria.nombre}"></span>
-                                                <!-- Puedes seguir anidando más niveles si es necesario -->
                                             </li>
                                         </ul>
                                     </li>

@@ -95,4 +95,8 @@ public class Categoria implements CategoriaComponent {
             subcategoria.mostrarCategorias(nivel + 1);
         }
     }
+
+    public boolean esHoja() {
+        return subcategorias == null || subcategorias.isEmpty();
+    }
 }
