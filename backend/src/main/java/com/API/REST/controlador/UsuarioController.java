@@ -35,7 +35,7 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
                     @RequestParam(name = "rol", required = false) String rol,
                     @RequestParam(name = "sexo", required = false) Sexo sexo,
                     @RequestParam(name = "page", defaultValue = "0") int page,
-                    @RequestParam(name = "size", defaultValue = "20") int size,
+                    @RequestParam(name = "size", defaultValue = "10") int size,
                     Model modelo) {
     // Filtrar los usuarios
     List<Usuario> usuariosFiltrados = filterUsuarios(activo, rol, sexo);

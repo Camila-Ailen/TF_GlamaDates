@@ -55,17 +55,18 @@ public class CategoriaController {
 
     @GetMapping("/crear")
     public String nuevaCategoria(Model model) {
-        model.addAttribute("modal", true);
-
-        model.addAttribute("contenido", "admin/categorias/form");
+        model.addAttribute("categoria", new Categoria());
+        model.addAttribute("categorias", categoriaService.findAll());
+        model.addAttribute("contenido", "admin/categorias/crear");
         return "admin/principal";
     }
 
     @PostMapping
-    public String postCategoria(@Valid @ModelAttribute Categoria categoria) {
+    public String postCategoria(@Valid @ModelAttribute Categoria categoria, RedirectAttributes redirectAttributes) {
         categoria.setActivo(true);
         categoriaService.save(categoria);
-        return "redirect:/categorias";
+        redirectAttributes.addFlashAttribute("mensaje", "Categoria creada exitosamente");
+        return "redirect:/admin/categorias";
     }
 
     @GetMapping("/{id}/editar")
