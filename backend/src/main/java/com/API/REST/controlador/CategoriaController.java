@@ -72,7 +72,9 @@ public class CategoriaController {
     @GetMapping("/{id}/editar")
     public String editCategoriaForm(@PathVariable Long id, Model model) {
         Categoria categoria = categoriaService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid categoria Id:" + id));
-        model.addAttribute("contenido", "admin/categorias/form");
+        model.addAttribute("categoria", categoria);
+        model.addAttribute("categorias", categoriaService.findAll());
+        model.addAttribute("contenido", "admin/categorias/modificar");
         return "admin/principal";
     }
 
@@ -83,14 +85,16 @@ public class CategoriaController {
             model.addAttribute("contenido", "admin/categorias/modificar");
             return "admin/principal";
         }
+        System.out.println("estoy en el controlador del put");
         categoriaService.updateCategoria(id, categoria);
         redirectAttributes.addFlashAttribute("mensaje", "Categoria actualizada correctamente");
-        return "redirect:/categorias";
+        return "redirect:/admin/categorias";
     }
 
     @DeleteMapping("/{id}")
     public String eliminarCategoria(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
+            System.out.println("estoy en el controlador del delete");
             categoriaService.softDeleteCategoria(id);
             redirectAttributes.addFlashAttribute("mensaje", "Categoria eliminada exitosamente.");
             return "redirect:/admin/categorias";

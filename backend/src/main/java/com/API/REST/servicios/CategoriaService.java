@@ -95,11 +95,24 @@ public class CategoriaService {
         return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), categorias.size());
     }
 
-    public void updateCategoria(long id, Categoria categoria){
-        Categoria categoriaActual = categoriaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid categoria Id:" + id));
+    public void updateCategoria(long id, Categoria categoria) {
+        Categoria categoriaActual = categoriaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid categoria Id:" + id));
         categoriaActual.setNombre(categoria.getNombre());
         categoriaActual.setObservaciones(categoria.getObservaciones());
-        categoriaActual.setActivo(categoria.isActivo());
+
+        if (categoria.isActivo() != categoriaActual.isActivo()) {
+            categoriaActual.setActivo(categoria.isActivo());
+        }
+
+        // Verificar y actualizar la categoría padre
+        if (categoria.getCategoriaPadre() != null) {
+            Categoria categoriaPadre = categoriaRepository.findById(categoria.getCategoriaPadre().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid categoria padre Id:" + categoria.getCategoriaPadre().getId()));
+            categoriaActual.setCategoriaPadre(categoriaPadre);
+        } else {
+            categoriaActual.setCategoriaPadre(null);
+        }
         categoriaRepository.save(categoriaActual);
     }
 
