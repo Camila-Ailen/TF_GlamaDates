@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home(Model model) {
-        return "home";
+        return "cliente/principal";
     }
 
     @GetMapping("/admin")
