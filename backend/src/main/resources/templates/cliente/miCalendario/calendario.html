@@ -8,36 +8,59 @@
 </head>
 <body class="bg-pink-50 min-h-screen flex items-center justify-center">
 
-<!-- Contenedor principal del calendario -->
-<div class="w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg">
-    <header class="text-center mb-6">
-        <h1 class="text-3xl font-bold text-pink-600">Mi Calendario</h1>
-        <p class="text-pink-400">Organiza tus horarios</p>
-    </header>
+<!-- Contenedor principal -->
+<div class="flex flex-col lg:flex-row w-full max-w-6xl p-6 bg-white rounded-lg shadow-lg">
+    <!-- Contenedor del calendario -->
+    <div class="w-full lg:w-3/4">
+        <header class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-pink-600">Mi Calendario</h1>
+            <p class="text-pink-400">Organiza tus horarios</p>
+        </header>
 
-    <!-- Controles del calendario (mes, año) -->
-    <div class="flex items-center justify-between mb-4">
-        <button id="prevMonth" class="text-pink-500 hover:text-pink-700">&#8592; Anterior</button>
-        <div id="currentMonth" class="text-pink-600 font-semibold">Noviembre 2024</div>
-        <button id="nextMonth" class="text-pink-500 hover:text-pink-700">Siguiente &#8594;</button>
+        <!-- Controles del calendario (mes, año) -->
+        <div class="flex items-center justify-between mb-4">
+            <button id="prevMonth" class="text-pink-500 hover:text-pink-700">&#8592; Anterior</button>
+            <div id="currentMonth" class="text-pink-600 font-semibold">Noviembre 2024</div>
+            <button id="nextMonth" class="text-pink-500 hover:text-pink-700">Siguiente &#8594;</button>
+        </div>
+
+        <!-- Encabezado de los días de la semana -->
+        <div class="grid grid-cols-7 gap-2 text-center text-pink-600 font-semibold">
+            <div>Lunes</div>
+            <div>Martes</div>
+            <div>Miércoles</div>
+            <div>Jueves</div>
+            <div>Viernes</div>
+            <div>Sábado</div>
+            <div>Domingo</div>
+        </div>
+
+        <!-- Contenedor de los días del mes -->
+        <div id="calendarDays" class="grid grid-cols-7 gap-2 text-center mt-2">
+            <!-- Aquí se generarán los días dinámicamente -->
+        </div>
     </div>
 
-    <!-- Encabezado de los días de la semana -->
-    <div class="grid grid-cols-7 gap-2 text-center text-pink-600 font-semibold">
-        <div>Lun</div>
-        <div>Mar</div>
-        <div>Mié</div>
-        <div>Jue</div>
-        <div>Vie</div>
-        <div>Sáb</div>
-        <div>Dom</div>
-    </div>
-
-    <!-- Contenedor de los días del mes -->
-    <div id="calendarDays" class="grid grid-cols-7 gap-2 text-center mt-2">
-        <!-- Aquí se generarán los días dinámicamente -->
+    <!-- Contenedor de los turnos activos -->
+    <div class="w-full lg:w-1/4 lg:ml-6 mt-6 lg:mt-0">
+        <header class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-pink-600">Turnos Activos</h2>
+        </header>
+        <div id="activeShifts" class="space-y-4">
+            <!-- Aquí se generarán los turnos dinámicamente -->
+            <div class="p-4 bg-pink-100 rounded-lg shadow">
+                <p class="text-pink-600">Turno 1</p>
+                <p class="text-pink-400">Detalles del turno 1</p>
+            </div>
+            <div class="p-4 bg-pink-100 rounded-lg shadow">
+                <p class="text-pink-600">Turno 2</p>
+                <p class="text-pink-400">Detalles del turno 2</p>
+            </div>
+            <!-- Agrega más turnos según sea necesario -->
+        </div>
     </div>
 </div>
+
 
 <script>
     // Configuración inicial del calendario
@@ -73,10 +96,13 @@
         for (let day = 1; day <= lastDate; day++) {
             const dayDiv = document.createElement("div");
             dayDiv.textContent = day;
-            dayDiv.className = "p-2 rounded-lg hover:bg-pink-100";
+            dayDiv.className = "p-2 rounded-lg hover:bg-pink-100 cursor-pointer";
             if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
                 dayDiv.classList.add("bg-pink-500", "text-white");
             }
+            dayDiv.addEventListener("click", () => {
+                window.location.href = `/calendario/${year}-${month + 1}-${day}`;
+            });
             calendarDays.appendChild(dayDiv);
         }
     }

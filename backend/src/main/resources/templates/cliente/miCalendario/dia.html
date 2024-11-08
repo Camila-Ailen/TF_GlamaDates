@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles del Día</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-pink-50 min-h-screen flex items-center justify-center">
+<div class="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
+  <header class="text-center mb-6">
+    <h1 class="text-3xl font-bold text-pink-600">Detalles del Día</h1>
+    <p class="text-pink-400">Información para el día seleccionado</p>
+  </header>
+  <div class="text-center">
+    <p class="text-xl text-pink-600">Fecha: <span th:text="${day} + '-' + ${month} + '-' + ${year}"></span></p>
+    <!-- Aquí puedes agregar más detalles específicos del día -->
+  </div>
+</div>
+</body>
+</html>
