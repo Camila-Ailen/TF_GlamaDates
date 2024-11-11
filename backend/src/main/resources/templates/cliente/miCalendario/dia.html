@@ -14,8 +14,112 @@
   </header>
   <div class="text-center">
     <p class="text-xl text-pink-600">Fecha: <span th:text="${day} + '-' + ${month} + '-' + ${year}"></span></p>
-    <!-- Aquí puedes agregar más detalles específicos del día -->
   </div>
+
+  <!-- Formulario para sacar turno -->
+  <form id="turnoForm" class="mt-6">
+    <!-- Categoría de turno -->
+    <div class="mb-4">
+      <label for="categoria" class="block text-pink-600">Categoría de Turno</label>
+      <select id="categoria" class="w-full p-2 border rounded" required>
+        <option value="">Seleccione una categoría</option>
+        <option th:each="categoria : ${categoriasPadre}" th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
+      </select>
+    </div>
+
+    <!-- Horarios disponibles -->
+    <div class="mb-4">
+      <label for="horario" class="block text-pink-600">Horarios Disponibles</label>
+      <select id="horario" class="w-full p-2 border rounded" disabled required>
+        <option value="">Seleccione un horario</option>
+        <!-- Opciones de horarios -->
+      </select>
+    </div>
+
+    <!-- Profesionales -->
+    <div class="mb-4">
+      <label for="profesional" class="block text-pink-600">Profesional</label>
+      <select id="profesional" class="w-full p-2 border rounded" disabled required>
+        <option value="">Seleccione un profesional</option>
+        <!-- Opciones de profesionales -->
+      </select>
+    </div>
+
+    <!-- Paquetes -->
+    <div class="mb-4">
+      <label class="block text-pink-600">Paquetes</label>
+      <div id="paquetes" class="space-y-4">
+        <!-- Contenedores de paquetes -->
+      </div>
+    </div>
+
+    <button type="submit" class="w-full p-2 bg-pink-600 text-white rounded">Sacar Turno</button>
+  </form>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoriaSelect = document.getElementById('categoria');
+    const horarioSelect = document.getElementById('horario');
+    const profesionalSelect = document.getElementById('profesional');
+    const paquetesContainer = document.getElementById('paquetes');
+
+    // Simulación de datos
+    const horarios = {
+      1: ['09:00', '10:00', '11:00'],
+      2: ['12:00', '13:00', '14:00']
+    };
+    const profesionales = {
+      1: ['Profesional 1', 'Profesional 2'],
+      2: ['Profesional 3', 'Profesional 4']
+    };
+    const paquetes = [
+      { nombre: 'Paquete 1', servicios: ['Servicio 1', 'Servicio 2'], precio: 100, tiempo: '1 hora' },
+      { nombre: 'Paquete 2', servicios: ['Servicio 3', 'Servicio 4'], precio: 150, tiempo: '1.5 horas' }
+    ];
+
+    // Habilitar horarios y profesionales según la categoría seleccionada
+    categoriaSelect.addEventListener('change', function() {
+      const categoriaId = this.value;
+      if (categoriaId) {
+        // Cargar horarios
+        horarioSelect.innerHTML = '<option value="">Seleccione un horario</option>';
+        horarios[categoriaId].forEach(horario => {
+          const option = document.createElement('option');
+          option.value = horario;
+          option.textContent = horario;
+          horarioSelect.appendChild(option);
+        });
+        horarioSelect.disabled = false;
+
+        // Cargar profesionales
+        profesionalSelect.innerHTML = '<option value="">Seleccione un profesional</option>';
+        profesionales[categoriaId].forEach(profesional => {
+          const option = document.createElement('option');
+          option.value = profesional;
+          option.textContent = profesional;
+          profesionalSelect.appendChild(option);
+        });
+        profesionalSelect.disabled = false;
+      } else {
+        horarioSelect.disabled = true;
+        profesionalSelect.disabled = true;
+      }
+    });
+
+    // Cargar paquetes
+    paquetes.forEach(paquete => {
+      const paqueteDiv = document.createElement('div');
+      paqueteDiv.className = 'p-4 bg-pink-100 rounded-lg shadow';
+      paqueteDiv.innerHTML = `
+        <h3 class="text-pink-600 font-bold">${paquete.nombre}</h3>
+        <p class="text-pink-400">Servicios: ${paquete.servicios.join(', ')}</p>
+        <p class="text-pink-400">Precio: $${paquete.precio}</p>
+        <p class="text-pink-400">Tiempo estimado: ${paquete.tiempo}</p>
+      `;
+      paquetesContainer.appendChild(paqueteDiv);
+    });
+  });
+</script>
 </body>
 </html>

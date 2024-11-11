@@ -23,6 +23,9 @@ public class CategoriaService {
         return categoriaRepository.findAll();
     }
 
+    public List<Categoria> findCategoriasPadre(){
+        return categoriaRepository.findByCategoriaPadreIsNull();
+    }
 
     public List<Categoria> sortCategorias(List<Categoria> categorias, String sortField, String sortDir) {
         categorias.sort((c1, c2) -> {
