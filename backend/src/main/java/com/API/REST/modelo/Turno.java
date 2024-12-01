@@ -18,11 +18,11 @@ public class Turno {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_turno", nullable = false, unique = true)
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "fecha_turno", nullable = false)
-    private Date fecha;
+    private LocalDate fecha;
 
     @Basic
     @Column(name = "hora_turno", nullable = false)
@@ -53,9 +53,19 @@ public class Turno {
     @JoinColumn(name = "fk_profesional", nullable = false)
     private Usuario profesional;
 
+    //Muchos turnos pueden pertenecer a un usuario
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     //Muchos turnos pueden pertenecer a una estacion
     @ManyToOne
-    @JoinColumn(name = "fk_estacion", nullable = false)
+    @JoinColumn(name = "estacion_id", nullable = false)
     private Estacion unaEstacion;
+
+    //Muchos turnos pueden pertenecer a un horario
+    @ManyToOne
+    @JoinColumn(name = "horario_id")
+    private Horario horario;
 
 }

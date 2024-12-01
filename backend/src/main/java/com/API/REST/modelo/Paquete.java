@@ -17,7 +17,7 @@ public class Paquete {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_paquete", nullable = false, unique = true)
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "nombre_paquete", length = 100, nullable = false)
@@ -39,6 +39,10 @@ public class Paquete {
     //Un paquete tiene muchos turnos
     @OneToMany(mappedBy = "unPaquete", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<Turno> unTurno;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
 
     //Muchos paquetes pueden tener muchos servicios
     @ManyToMany

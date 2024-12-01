@@ -17,7 +17,11 @@ public class Estacion {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_estacion", nullable = false, unique = true)
-    private long id;
+    private Long id;
+
+    @Basic
+    @Column(name = "nombre_estacion", length = 100, nullable = false)
+    private String nombre;
 
     @Basic
     @Column(name = "descripcion_estacion", length = 100, nullable = false)
@@ -31,7 +35,12 @@ public class Estacion {
 
     //RELACIONES
     //una estacion tiene muchas categorias
-    @ManyToMany(mappedBy = "listaEstaciones")
+    @ManyToMany
+    @JoinTable(
+            name = "estacion_categoria",
+            joinColumns = @JoinColumn(name = "estacion_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
     private Set<Categoria> listaCategorias;
 
     //una estacion tiene muchos turnos

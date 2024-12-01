@@ -17,7 +17,7 @@ public class Categoria implements CategoriaComponent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_categoria", nullable = false, unique = true)
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "nombre_categoria", length = 100, nullable = false)
@@ -60,13 +60,12 @@ public class Categoria implements CategoriaComponent {
 
 
     //muchas categorias tiene muchas estaciones
-    @ManyToMany
-    @JoinTable(
-            name = "categoria_estacion",
-            joinColumns = @JoinColumn(name = "fk_categoria"),
-            inverseJoinColumns = @JoinColumn(name = "fk_estacion")
-    )
+    @ManyToMany(mappedBy = "listaCategorias")
     private Set<Estacion> listaEstaciones;
+
+    //muchas categorias tiene muchos usuarios
+    @ManyToMany(mappedBy = "categorias")
+    private Set<Usuario> listaUsuarios;
 
 
     // Implementación de los métodos de CategoriaComponent

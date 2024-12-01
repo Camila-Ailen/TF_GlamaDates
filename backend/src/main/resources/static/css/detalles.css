@@ -17,3 +17,7 @@
     padding: 20px; /* Ajusta el padding según sea necesario */
     box-sizing: border-box;
 }
+
+.selected {
+    background-color: #ffe4e1; /* color rosa claro */
+}

@@ -11,12 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,9 +22,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UsuarioService {
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public List<Usuario> findProfesionalesDisponibles(Long categoriaId, int year, int month, int day, Long horarioId) {
+        LocalDate fecha = LocalDate.of(year, month, day);
+        return usuarioRepository.findProfesionalesDisponibles(categoriaId, fecha, horarioId);
+    }
 
     public List<Usuario> findAllUsuarios() {
         var usuarios = this.usuarioRepository.findAll();
@@ -69,7 +73,7 @@ public class UsuarioService {
                     int result = 0;
                     switch (sortField) {
                         case "id":
-                            result = Integer.compare(u1.getId(), u2.getId());
+                            result = Long.compare(u1.getId(), u2.getId());
                             break;
                         case "nombre":
                             result = u1.getNombre().compareTo(u2.getNombre());
@@ -122,8 +126,6 @@ public class UsuarioService {
         return new PageImpl<>(usuarios.subList(start, end), pageRequest, usuarios.size());
     }
 
-
-
     public Usuario findUsuarioById(Integer usuarioId) {
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
@@ -137,8 +139,6 @@ public class UsuarioService {
             return usuarioRepository.save(usuario);
         }
     }
-
-
 
     public void updateUsuario(int usuarioId, Usuario usuarioDetails) {
         usuarioRepository.findById(usuarioId)
@@ -177,25 +177,4 @@ public class UsuarioService {
                     usuarioRepository.save(usuarioObtenido);
                 });
     }
-/*
-    public void actualizarPersonaPorId(int id, Persona persona) {
-        personaRepositorio.findById(id).
-                ifPresent(personaObtenida -> {
-                    personaObtenida.setApellidos(persona.getApellidos());
-                    personaObtenida.setNombres(persona.getNombres());
-                    personaRepositorio.save(personaObtenida);
-                });
-    }
-
-
-
-    public ResponseEntity<?> softDeleteUsuario(Integer usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
-        usuario.setActivo(false);
-        usuarioRepository.save(usuario);
-        return ResponseEntity.ok().build();
-    }
-
-*/
 }

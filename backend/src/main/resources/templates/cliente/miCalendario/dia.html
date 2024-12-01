@@ -1,125 +1,77 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalles del Día</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-pink-50 min-h-screen flex items-center justify-center">
-<div class="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
-  <header class="text-center mb-6">
-    <h1 class="text-3xl font-bold text-pink-600">Detalles del Día</h1>
-    <p class="text-pink-400">Información para el día seleccionado</p>
-  </header>
-  <div class="text-center">
-    <p class="text-xl text-pink-600">Fecha: <span th:text="${day} + '-' + ${month} + '-' + ${year}"></span></p>
-  </div>
 
-  <!-- Formulario para sacar turno -->
-  <form id="turnoForm" class="mt-6">
-    <!-- Categoría de turno -->
-    <div class="mb-4">
-      <label for="categoria" class="block text-pink-600">Categoría de Turno</label>
-      <select id="categoria" class="w-full p-2 border rounded" required>
-        <option value="">Seleccione una categoría</option>
-        <option th:each="categoria : ${categoriasPadre}" th:value="${categoria.id}" th:text="${categoria.nombre}"></option>
-      </select>
+<div class="bg-pink-50 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
+    <header class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-pink-600">Detalles del Día</h1>
+      <p class="text-pink-400">Información para el día seleccionado</p>
+    </header>
+    <div class="text-center">
+      <p class="text-xl text-pink-600">Fecha: <span th:text="${day} + '-' + ${month} + '-' + ${year}"></span></p>
     </div>
 
-    <!-- Horarios disponibles -->
-    <div class="mb-4">
-      <label for="horario" class="block text-pink-600">Horarios Disponibles</label>
-      <select id="horario" class="w-full p-2 border rounded" disabled required>
-        <option value="">Seleccione un horario</option>
-        <!-- Opciones de horarios -->
-      </select>
-    </div>
+    <!-- Formulario para sacar turno -->
+    <form id="turnoForm" class="mt-6"
+          th:action="@{/calendario/{year}-{month}-{day}(year=${year}, month=${month}, day=${day}, categoriaId=${categoriaId})}" method="get">
 
-    <!-- Profesionales -->
-    <div class="mb-4">
-      <label for="profesional" class="block text-pink-600">Profesional</label>
-      <select id="profesional" class="w-full p-2 border rounded" disabled required>
-        <option value="">Seleccione un profesional</option>
-        <!-- Opciones de profesionales -->
-      </select>
-    </div>
 
-    <!-- Paquetes -->
-    <div class="mb-4">
-      <label class="block text-pink-600">Paquetes</label>
-      <div id="paquetes" class="space-y-4">
-        <!-- Contenedores de paquetes -->
+      <div class="flex">
+        <!-- Parte izquierda, combos -->
+        <div class="w-1/2 pr-4">
+          <!-- Categoría de turno -->
+          <div class="mb-4">
+            <label for="categoria" class="block text-pink-600">Categoría de Turno</label>
+            <select id="categoria" name="categoriaId" class="w-full p-2 border rounded" required onchange="this.form.submit()">
+              <option value="">Seleccione una categoría</option>
+              <option th:each="categoria : ${categoriasPadre}"
+                      th:value="${categoria.id}"
+                      th:text="${categoria.nombre}"
+                      th:selected="${categoria.id} == ${categoriaId}">
+              </option>
+            </select>
+          </div>
+          <p>Categoria seleccionada: <span th:text="${categoriaId}"></span></p>
+
+          <!-- Horarios -->
+          <div class="mb-4" th:if="${horariosDisponibles}">
+            <label for="horario" class="block text-pink-600">Horarios Disponibles</label>
+            <select id="horario" name="horarioId" class="w-full p-2 border rounded" required onchange="this.form.submit()">
+              <option value="">Seleccione un horario</option>
+              <option th:each="horario : ${horariosDisponibles}"
+                      th:value="${horario.id}" th:text="${horario.horaInicio} + ' - ' + ${horario.horaFin}"
+                      th:selected="${horario.id} == ${horarioId}"></option>
+            </select>
+          </div>
+          <p>Horario seleccionado: <span th:text="${horarioId}"></span></p>
+
+          <!-- Profesionales -->
+          <div class="mb-4" th:if="${profesionalesDisponibles}">
+            <label for="profesional" class="block text-pink-600">Profesional</label>
+            <select id="profesional" name="profesionalId" class="w-full p-2 border rounded">
+              <option value="">Seleccione un profesional (opcional)</option>
+              <option th:each="profesional : ${profesionalesDisponibles}" th:value="${profesional.id}" th:text="${profesional.nombre} + ' ' + ${profesional.apellido}"
+                      th:selected="${profesional.id} == ${profesionalId}"></option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Parte derecha, paquetes -->
+        <div class="w-1/2 pl-4" th:if="${paquetesDisponibles}">
+          <label class="block text-pink-600">Paquetes Disponibles</label>
+          <div id="paquetes" class="space-y-4">
+            <div th:each="paquete : ${paquetesDisponibles}" class="p-4 border rounded-lg cursor-pointer hover:bg-pink-100"
+                 th:classappend="${paquete.id} == ${paqueteId} ? 'selected' : ''">
+              <input type="radio" name="paqueteId" th:value="${paquete.id}" th:checked="${paquete.id} == ${paqueteId}" class="hidden">
+              <p class="text-pink-600 font-bold" th:text="${paquete.nombre}"></p>
+              <p class="text-pink-400" th:text="${paquete.descripcion}"></p>
+              <a th:href="@{/paquete/detalles/{id}(id=${paquete.id}, year=${year}, month=${month}, day=${day}, categoriaId=${categoriaId}, horarioId=${horarioId})}" class="text-pink-600 underline">Ver Detalle</a>
+              <br>
+              <a th:href="@{/calendario/{year}-{month}-{day}(year=${year}, month=${month}, day=${day}, categoriaId=${categoriaId}, horarioId=${horarioId}, paqueteId=${paquete.id})}" class="text-pink-600 underline">Seleccionar Paquete</a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <button type="submit" class="w-full p-2 bg-pink-600 text-white rounded">Sacar Turno</button>
-  </form>
+      <button type="submit" class="w-full p-2 bg-pink-600 text-white rounded">Sacar Turno</button>
+    </form>
+  </div>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const categoriaSelect = document.getElementById('categoria');
-    const horarioSelect = document.getElementById('horario');
-    const profesionalSelect = document.getElementById('profesional');
-    const paquetesContainer = document.getElementById('paquetes');
-
-    // Simulación de datos
-    const horarios = {
-      1: ['09:00', '10:00', '11:00'],
-      2: ['12:00', '13:00', '14:00']
-    };
-    const profesionales = {
-      1: ['Profesional 1', 'Profesional 2'],
-      2: ['Profesional 3', 'Profesional 4']
-    };
-    const paquetes = [
-      { nombre: 'Paquete 1', servicios: ['Servicio 1', 'Servicio 2'], precio: 100, tiempo: '1 hora' },
-      { nombre: 'Paquete 2', servicios: ['Servicio 3', 'Servicio 4'], precio: 150, tiempo: '1.5 horas' }
-    ];
-
-    // Habilitar horarios y profesionales según la categoría seleccionada
-    categoriaSelect.addEventListener('change', function() {
-      const categoriaId = this.value;
-      if (categoriaId) {
-        // Cargar horarios
-        horarioSelect.innerHTML = '<option value="">Seleccione un horario</option>';
-        horarios[categoriaId].forEach(horario => {
-          const option = document.createElement('option');
-          option.value = horario;
-          option.textContent = horario;
-          horarioSelect.appendChild(option);
-        });
-        horarioSelect.disabled = false;
-
-        // Cargar profesionales
-        profesionalSelect.innerHTML = '<option value="">Seleccione un profesional</option>';
-        profesionales[categoriaId].forEach(profesional => {
-          const option = document.createElement('option');
-          option.value = profesional;
-          option.textContent = profesional;
-          profesionalSelect.appendChild(option);
-        });
-        profesionalSelect.disabled = false;
-      } else {
-        horarioSelect.disabled = true;
-        profesionalSelect.disabled = true;
-      }
-    });
-
-    // Cargar paquetes
-    paquetes.forEach(paquete => {
-      const paqueteDiv = document.createElement('div');
-      paqueteDiv.className = 'p-4 bg-pink-100 rounded-lg shadow';
-      paqueteDiv.innerHTML = `
-        <h3 class="text-pink-600 font-bold">${paquete.nombre}</h3>
-        <p class="text-pink-400">Servicios: ${paquete.servicios.join(', ')}</p>
-        <p class="text-pink-400">Precio: $${paquete.precio}</p>
-        <p class="text-pink-400">Tiempo estimado: ${paquete.tiempo}</p>
-      `;
-      paquetesContainer.appendChild(paqueteDiv);
-    });
-  });
-</script>
-</body>
-</html>

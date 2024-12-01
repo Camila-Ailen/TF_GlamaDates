@@ -28,7 +28,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_usuario", nullable = false, unique = true)
-    private int id;
+    private Long id;
 
     @Basic
     @Column(name = "nombre_usuario", length = 100, nullable = false)
@@ -99,6 +99,14 @@ public class Usuario {
     @JsonIgnore
     private Set<Turno> turnosComoProfesional;
 
+    //Un usuario tiene muchas categorias
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_categoria",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private Set<Categoria> categorias;
 
 
 
