@@ -14,8 +14,7 @@ public class EstacionService {
     @Autowired
     private EstacionRepository estacionRepository;
 
-    public List<Estacion> findEstacionesDisponibles(Long categoriaId, int year, int month, int day, Long horarioId) {
-        LocalDate fecha = LocalDate.of(year, month, day);
+    public List<Estacion> findEstacionesDisponibles(Long categoriaId, LocalDate fecha, Long horarioId) {
         return estacionRepository.findEstacionesDisponibles(categoriaId, fecha, horarioId);
     }
 }

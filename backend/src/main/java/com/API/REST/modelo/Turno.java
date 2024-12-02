@@ -24,9 +24,6 @@ public class Turno {
     @Column(name = "fecha_turno", nullable = false)
     private LocalDate fecha;
 
-    @Basic
-    @Column(name = "hora_turno", nullable = false)
-    private String hora;
 
     //ENUMS
     @Enumerated(EnumType.STRING)
@@ -52,11 +49,6 @@ public class Turno {
     @ManyToOne
     @JoinColumn(name = "fk_profesional", nullable = false)
     private Usuario profesional;
-
-    //Muchos turnos pueden pertenecer a un usuario
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
 
     //Muchos turnos pueden pertenecer a una estacion
     @ManyToOne

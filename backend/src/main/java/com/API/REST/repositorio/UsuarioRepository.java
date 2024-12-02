@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer>, JpaSpecificationExecutor<Usuario> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpecificationExecutor<Usuario> {
 
     //@Query("SELECT u FROM Usuario u JOIN u.categorias c WHERE c.id = :categoriaId AND u.id NOT IN (SELECT t.usuario.id FROM Turno t WHERE t.fecha = :fecha)")
     //List<Usuario> findProfesionalesDisponibles(Long categoriaId, LocalDate fecha);
@@ -29,8 +29,18 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>, JpaS
 
     Page<Usuario> findAll(Pageable pageable);
 
-    @Query("SELECT u FROM Usuario u JOIN u.categorias c WHERE c.id = :categoriaId AND u.id NOT IN (SELECT t.usuario.id FROM Turno t WHERE t.fecha = :fecha AND t.horario.id = :horarioId)")
+    /*
+    @Query("SELECT DISTINCT u FROM Usuario u " +
+            "JOIN u.categorias c " +
+            "JOIN u.turnosComoProfesional t " +
+            "WHERE c.id = :categoriaId " +
+            "AND t.fecha = :fecha " +
+            "AND u.horario.id = :horarioId " +
+            "AND u.activo = true " +
+            "AND u.unRol.nombre = 'PROFESIONAL'")
     List<Usuario> findProfesionalesDisponibles(@Param("categoriaId") Long categoriaId, @Param("fecha") LocalDate fecha, @Param("horarioId") Long horarioId);
+    */
 
-
+    @Query("SELECT u FROM Usuario u LEFT JOIN u.horario h JOIN u.categorias c WHERE c.id = :categoriaId AND (h.id IS NULL OR h.id = :horarioId)")
+    List<Usuario> findProfesionalesDisponibles(@Param("categoriaId") Long categoriaId, @Param("horarioId") Long horarioId);
 }

@@ -93,7 +93,7 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     }
 
     @GetMapping("/{id}/editar")
-    public String editarUsuario(@PathVariable("id") Integer id, Model modelo) {
+    public String editarUsuario(@PathVariable("id") Long id, Model modelo) {
         Usuario usuario = usuarioService.findUsuarioById(id);
         List<Rol> roles = rolService.findAllRoles();
         Sexo[] sexos = Sexo.values();
@@ -106,7 +106,7 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     }
 
     @PutMapping("/{id}")
-    public String actualizarUsuario(@PathVariable("id") Integer id, @ModelAttribute Usuario usuario, BindingResult resultado, RedirectAttributes redirectAttributes, Model modelo) {
+    public String actualizarUsuario(@PathVariable("id") Long id, @ModelAttribute Usuario usuario, BindingResult resultado, RedirectAttributes redirectAttributes, Model modelo) {
         if (resultado.hasErrors()) {
             System.out.println("Hay errores");
             modelo.addAttribute("contenido", "admin/usuarioModificar");
@@ -118,7 +118,7 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     }
 
     @DeleteMapping("/{id}")
-    public String eliminarUsuario(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String eliminarUsuario(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
         usuarioService.softDeleteUsuario(id);
             redirectAttributes.addFlashAttribute("mensaje", "Usuario eliminado exitosamente.");
@@ -131,7 +131,7 @@ public String index(@RequestParam(name = "sortField", defaultValue = "id") Strin
     }
 
     @PutMapping("/{id}/activar")
-    public String activarUsuario(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String activarUsuario(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             usuarioService.activarUsuario(id);
             redirectAttributes.addFlashAttribute("mensaje", "Usuario activado exitosamente.");

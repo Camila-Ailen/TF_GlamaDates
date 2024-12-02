@@ -9,10 +9,11 @@
       <p class="text-xl text-pink-600">Fecha: <span th:text="${day} + '-' + ${month} + '-' + ${year}"></span></p>
     </div>
 
-    <!-- Formulario para sacar turno -->
-    <form id="turnoForm" class="mt-6"
-          th:action="@{/calendario/{year}-{month}-{day}(year=${year}, month=${month}, day=${day}, categoriaId=${categoriaId})}" method="get">
-
+    <!-- Formulario para seleccionar categoría, horario, paquete, etc. -->
+    <form id="seleccionForm" class="mt-6" th:action="@{/calendario/{year}-{month}-{day}(year=${year}, month=${month}, day=${day})}" method="get">
+      <input type="hidden" name="year" th:value="${year}">
+      <input type="hidden" name="month" th:value="${month}">
+      <input type="hidden" name="day" th:value="${day}">
 
       <div class="flex">
         <!-- Parte izquierda, combos -->
@@ -37,7 +38,7 @@
             <select id="horario" name="horarioId" class="w-full p-2 border rounded" required onchange="this.form.submit()">
               <option value="">Seleccione un horario</option>
               <option th:each="horario : ${horariosDisponibles}"
-                      th:value="${horario.id}" th:text="${horario.horaInicio} + ' - ' + ${horario.horaFin}"
+                      th:value="${horario.id}" th:text="${horario.horaInicio}"
                       th:selected="${horario.id} == ${horarioId}"></option>
             </select>
           </div>
@@ -59,7 +60,7 @@
           <label class="block text-pink-600">Paquetes Disponibles</label>
           <div id="paquetes" class="space-y-4">
             <div th:each="paquete : ${paquetesDisponibles}" class="p-4 border rounded-lg cursor-pointer hover:bg-pink-100"
-                 th:classappend="${paquete.id} == ${paqueteId} ? 'selected' : ''">
+                 th:classappend="${paquete.id} == ${paqueteId} ? 'selected' : '' ">
               <input type="radio" name="paqueteId" th:value="${paquete.id}" th:checked="${paquete.id} == ${paqueteId}" class="hidden">
               <p class="text-pink-600 font-bold" th:text="${paquete.nombre}"></p>
               <p class="text-pink-400" th:text="${paquete.descripcion}"></p>
@@ -70,6 +71,18 @@
           </div>
         </div>
       </div>
+    </form>
+
+    <!-- Formulario para sacar turno -->
+    <form id="turnoForm" class="mt-6" th:action="@{/calendario/sacarTurno}" method="post">
+      <input type="hidden" name="year" th:value="${year}">
+      <input type="hidden" name="month" th:value="${month}">
+      <input type="hidden" name="day" th:value="${day}">
+      <input type="hidden" name="hora" th:value="${hora}">
+      <input type="hidden" name="categoriaId" th:value="${categoriaId}">
+      <input type="hidden" name="horarioId" th:value="${horarioId}">
+      <input type="hidden" name="paqueteId" th:value="${paqueteId}">
+      <input type="hidden" name="profesionalId" th:value="${profesionalId}">
 
       <button type="submit" class="w-full p-2 bg-pink-600 text-white rounded">Sacar Turno</button>
     </form>

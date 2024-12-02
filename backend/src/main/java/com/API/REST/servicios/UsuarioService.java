@@ -7,6 +7,8 @@ import com.API.REST.modelo.Usuario;
 import com.API.REST.repositorio.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,9 +29,8 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public List<Usuario> findProfesionalesDisponibles(Long categoriaId, int year, int month, int day, Long horarioId) {
-        LocalDate fecha = LocalDate.of(year, month, day);
-        return usuarioRepository.findProfesionalesDisponibles(categoriaId, fecha, horarioId);
+    public List<Usuario> findProfesionalesDisponibles(Long categoriaId, LocalDate fecha, Long horarioId) {
+        return usuarioRepository.findProfesionalesDisponibles(categoriaId, horarioId);
     }
 
     public List<Usuario> findAllUsuarios() {
@@ -107,17 +108,6 @@ public class UsuarioService {
 
     public List<Usuario> findAllUsuariosActivos() {
         return usuarioRepository.findByActivo(true);
-        /*
-        var usuarios = this.usuarioRepository.findAll();
-        var listado = new ArrayList<Usuario>();
-        for (var usuario : usuarios) {
-            if (usuario.isActivo()) {
-                listado.add(usuario);
-            }
-        }
-        return listado;
-
-         */
     }
 
     public Page<Usuario> getPaginatedUsuarios(List<Usuario> usuarios, PageRequest pageRequest) {
@@ -126,7 +116,7 @@ public class UsuarioService {
         return new PageImpl<>(usuarios.subList(start, end), pageRequest, usuarios.size());
     }
 
-    public Usuario findUsuarioById(Integer usuarioId) {
+    public Usuario findUsuarioById(Long usuarioId) {
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", usuarioId));
     }
@@ -140,7 +130,7 @@ public class UsuarioService {
         }
     }
 
-    public void updateUsuario(int usuarioId, Usuario usuarioDetails) {
+    public void updateUsuario(Long usuarioId, Usuario usuarioDetails) {
         usuarioRepository.findById(usuarioId)
                 .ifPresent(usuarioObtenido -> {
                     usuarioObtenido.setNombre(usuarioDetails.getNombre());
@@ -162,7 +152,7 @@ public class UsuarioService {
 
     }
 
-    public void softDeleteUsuario (int id) {
+    public void softDeleteUsuario (Long id) {
         usuarioRepository.findById(id).
                 ifPresent(usuarioObtenido -> {
                     usuarioObtenido.setActivo(false);
@@ -170,11 +160,23 @@ public class UsuarioService {
                 });
     }
 
-    public void activarUsuario (int id) {
+    public void activarUsuario (Long id) {
         usuarioRepository.findById(id).
                 ifPresent(usuarioObtenido -> {
                     usuarioObtenido.setActivo(true);
                     usuarioRepository.save(usuarioObtenido);
                 });
+    }
+
+    public Usuario getClienteActual() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return usuarioRepository.findByCorreo(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", "correo", username));
     }
 }

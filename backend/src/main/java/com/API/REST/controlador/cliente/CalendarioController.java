@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -31,6 +33,9 @@ public class CalendarioController {
     @Autowired
     private ServicioService servicioService;
 
+    @Autowired
+    private TurnoService turnoService;
+
     @GetMapping
     public String index(Model model) {
         model.addAttribute("contenidoCliente", "cliente/miCalendario/calendario");
@@ -46,8 +51,13 @@ public class CalendarioController {
                          @RequestParam(required = false) Long paqueteId,
                          @RequestParam(required = false) Long profesionalId,
                          Model model) {
+
+        LocalDate fecha = LocalDate.of(year.intValue(), month.intValue(), day.intValue());
+
         List<Categoria> categoriasPadre = categoriaService.findCategoriasPadre();
         model.addAttribute("categoriasPadre", categoriasPadre);
+        List<Usuario> profesionalesDisponibles = usuarioService.findProfesionalesDisponibles(categoriaId, fecha, horarioId);
+        model.addAttribute("profesionalesDisponibles", profesionalesDisponibles);
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("day", day);
@@ -56,13 +66,15 @@ public class CalendarioController {
         model.addAttribute("paqueteId", paqueteId);
         model.addAttribute("profesionalId", profesionalId);
 
+
+
         if (categoriaId != null) {
             List<Horario> horariosDisponibles = horarioService.findHorariosDisponibles(categoriaId, year.intValue(), month.intValue(), day.intValue());
             model.addAttribute("horariosDisponibles", horariosDisponibles);
         }
 
         if (categoriaId != null && horarioId != null) {
-            List<Usuario> profesionalesDisponibles = usuarioService.findProfesionalesDisponibles(categoriaId, year.intValue(), month.intValue(), day.intValue(), horarioId);
+            profesionalesDisponibles = usuarioService.findProfesionalesDisponibles(categoriaId, fecha, horarioId);
             model.addAttribute("profesionalesDisponibles", profesionalesDisponibles);
 
             List<Paquete> paquetesDisponibles = paqueteService.findPaquetesDisponibles(categoriaId, year.intValue(), month.intValue(), day.intValue(), horarioId);
@@ -72,9 +84,12 @@ public class CalendarioController {
         System.out.println("PaqueteId: " + paqueteId);
         System.out.println("CategoriaId: " + categoriaId);
         System.out.println("HorarioId: " + horarioId);
+        System.out.println("ProfesionalId: " + profesionalId);
+        System.out.println("Lista de profesionales: " + usuarioService.findProfesionalesDisponibles(categoriaId, fecha, horarioId));
         System.out.println("Year: " + year);
         System.out.println("Month: " + month);
         System.out.println("Day: " + day);
+
 
         model.addAttribute("contenidoCliente", "cliente/miCalendario/dia");
         return "cliente/principal";
@@ -90,5 +105,20 @@ public class CalendarioController {
 
         model.addAttribute("contenidoCliente", "cliente/miCalendario/paqueteDetalles");
         return "cliente/principal";
+    }
+
+    @PostMapping("/sacarTurno")
+    public String sacarTurno(@RequestParam Long year,
+                             @RequestParam Long month,
+                             @RequestParam Long day,
+                             @RequestParam Long categoriaId,
+                             @RequestParam Long horarioId,
+                             @RequestParam Long paqueteId,
+                             @RequestParam(required = false) Long profesionalId,
+                             Model model) {
+        Usuario cliente = usuarioService.getClienteActual();
+        Turno turno = turnoService.crearTurno(year, month, day, categoriaId, horarioId, paqueteId, profesionalId, cliente);
+        model.addAttribute("turno", turno);
+        return "redirect:/calendario";
     }
 }

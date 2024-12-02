@@ -85,7 +85,7 @@ public class Usuario {
     //RELACIONES
     //Muchos usuarios tienen un rol
     @ManyToOne
-    @JoinColumn(name = "fk_rol")
+    @JoinColumn(name = "rol_id")
     @JsonManagedReference
     private Rol unRol;
 
@@ -107,6 +107,11 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private Set<Categoria> categorias;
+
+
+    @ManyToOne
+    @JoinColumn(name = "horario_id")
+    private Horario horario;
 
 
 

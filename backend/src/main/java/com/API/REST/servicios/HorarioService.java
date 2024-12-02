@@ -20,7 +20,12 @@ public class HorarioService {
     }
 
     //encontrar horarios disponibles por id
-    public List<Horario> findHorarioById(Long categoriaId, LocalDate fecha) {
+    public List<Horario> findById(Long categoriaId, LocalDate fecha) {
         return horarioRepository.findHorariosDisponibles(categoriaId, fecha);
+    }
+
+    //encontrar horarios disponibles por id
+    public Horario findHorarioById(Long id) {
+        return horarioRepository.findById(id).orElse(null);
     }
 }
