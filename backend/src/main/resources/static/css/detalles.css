@@ -21,3 +21,8 @@
 .selected {
     background-color: #ffe4e1; /* color rosa claro */
 }
+
+.selected-package {
+    background-color: #fce4ec;
+    border-color: #f48fb1;
+}

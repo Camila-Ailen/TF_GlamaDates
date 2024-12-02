@@ -77,6 +77,7 @@
         const year = date.getFullYear();
         const month = date.getMonth();
         const today = new Date();
+        today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 para comparar solo la fecha
 
         // Mostrar el mes y año actual
         currentMonthDisplay.textContent = `${months[month]} ${year}`;
@@ -85,7 +86,7 @@
         const firstDay = new Date(year, month, 1).getDay(); // Día de la semana del primer día del mes
         const lastDate = new Date(year, month + 1, 0).getDate(); // Último día del mes
 
-        // Rellenar días en blanco
+        // Rellenar d��as en blanco
         const blanks = firstDay === 0 ? 6 : firstDay - 1; // Ajuste para que el lunes sea el primer día
         for (let i = 0; i < blanks; i++) {
             const blankDiv = document.createElement("div");
@@ -101,7 +102,12 @@
                 dayDiv.classList.add("bg-pink-500", "text-white");
             }
             dayDiv.addEventListener("click", () => {
-                window.location.href = `/calendario/${year}-${month + 1}-${day}`;
+                const selectedDay = new Date(year, month, day);
+                if (selectedDay < today) {
+                    alert("No puedes seleccionar un día pasado");
+                } else {
+                    window.location.href = `/calendario/${year}-${month + 1}-${day}`;
+                }
             });
             calendarDays.appendChild(dayDiv);
         }

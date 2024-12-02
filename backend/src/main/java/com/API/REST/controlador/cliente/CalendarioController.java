@@ -53,6 +53,13 @@ public class CalendarioController {
                          Model model) {
 
         LocalDate fecha = LocalDate.of(year.intValue(), month.intValue(), day.intValue());
+        LocalDate fechaActual = LocalDate.now();
+
+        if (fecha.isBefore(fechaActual)) {
+            model.addAttribute("error", "No se pueden sacar turnos en fechas pasadas");
+            model.addAttribute("contenidoCliente", "cliente/miCalendario/dia");
+            return "cliente/principal";
+        }
 
         List<Categoria> categoriasPadre = categoriaService.findCategoriasPadre();
         model.addAttribute("categoriasPadre", categoriasPadre);

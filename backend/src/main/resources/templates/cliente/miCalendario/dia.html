@@ -1,4 +1,8 @@
 
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/detalles.css">
+</head>
+
 <div class="bg-pink-50 min-h-screen flex items-center justify-center">
   <div class="w-full max-w-2xl p-6 bg-white rounded-lg shadow-lg">
     <header class="text-center mb-6">
@@ -60,7 +64,7 @@
           <label class="block text-pink-600">Paquetes Disponibles</label>
           <div id="paquetes" class="space-y-4">
             <div th:each="paquete : ${paquetesDisponibles}" class="p-4 border rounded-lg cursor-pointer hover:bg-pink-100"
-                 th:classappend="${paquete.id} == ${paqueteId} ? 'selected' : '' ">
+                 th:classappend="${paquete.id} == ${paqueteId} ? 'selected-package' : '' ">
               <input type="radio" name="paqueteId" th:value="${paquete.id}" th:checked="${paquete.id} == ${paqueteId}" class="hidden">
               <p class="text-pink-600 font-bold" th:text="${paquete.nombre}"></p>
               <p class="text-pink-400" th:text="${paquete.descripcion}"></p>
