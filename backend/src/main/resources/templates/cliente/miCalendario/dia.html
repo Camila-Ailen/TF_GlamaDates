@@ -51,7 +51,7 @@
           <!-- Profesionales -->
           <div class="mb-4" th:if="${profesionalesDisponibles}">
             <label for="profesional" class="block text-pink-600">Profesional</label>
-            <select id="profesional" name="profesionalId" class="w-full p-2 border rounded">
+            <select id="profesional" name="profesionalId" class="w-full p-2 border rounded" onchange="this.form.submit()">
               <option value="">Seleccione un profesional (opcional)</option>
               <option th:each="profesional : ${profesionalesDisponibles}" th:value="${profesional.id}" th:text="${profesional.nombre} + ' ' + ${profesional.apellido}"
                       th:selected="${profesional.id} == ${profesionalId}"></option>

@@ -48,15 +48,12 @@
         </header>
         <div id="activeShifts" class="space-y-4">
             <!-- Aquí se generarán los turnos dinámicamente -->
-            <div class="p-4 bg-pink-100 rounded-lg shadow">
-                <p class="text-pink-600">Turno 1</p>
-                <p class="text-pink-400">Detalles del turno 1</p>
+            <div th:each="turno : ${turnosPendientes}" class="p-4 bg-pink-100 rounded-lg shadow">
+                <p class="text-pink-600" th:text="${turno.fecha}"></p>
+                <p class="text-pink-400" th:text="${turno.unPaquete.nombre}"></p>
+                <p class="text-pink-400" th:text="${turno.horario.horaInicio}"></p>
+                <p class="text-pink-400" th:text="${turno.profesional.nombre} + ' ' + ${turno.profesional.apellido}"></p>
             </div>
-            <div class="p-4 bg-pink-100 rounded-lg shadow">
-                <p class="text-pink-600">Turno 2</p>
-                <p class="text-pink-400">Detalles del turno 2</p>
-            </div>
-            <!-- Agrega más turnos según sea necesario -->
         </div>
     </div>
 </div>

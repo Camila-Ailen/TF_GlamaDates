@@ -38,6 +38,9 @@ public class CalendarioController {
 
     @GetMapping
     public String index(Model model) {
+        Usuario cliente = usuarioService.getClienteActual();
+        List<Turno> turnosPendientes = turnoService.findTurnosPendientesByCliente(cliente.getId());
+        model.addAttribute("turnosPendientes", turnosPendientes);
         model.addAttribute("contenidoCliente", "cliente/miCalendario/calendario");
         return "cliente/principal";
     }

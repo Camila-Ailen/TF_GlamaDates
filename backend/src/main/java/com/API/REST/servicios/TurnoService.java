@@ -62,4 +62,8 @@ public class TurnoService {
 
         return turnoRepository.save(turno);
     }
+
+    public List<Turno> findTurnosPendientesByCliente(Long clienteId) {
+        return turnoRepository.findByClienteIdAndEstado(clienteId, TurnoEstado.PENDIENTE);
+    }
 }

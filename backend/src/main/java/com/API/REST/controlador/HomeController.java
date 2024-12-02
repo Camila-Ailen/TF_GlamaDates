@@ -17,7 +17,7 @@ public class HomeController {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
     public String admin() {
         return "admin/principal";
     }
